@@ -9,7 +9,7 @@
 import fs from 'node:fs';
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
-const MODEL = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+const MODEL = process.env.GROQ_MODEL || 'openai/gpt-oss-120b';
 const N_QUESTIONS = 15;
 
 if (!GROQ_API_KEY) {
