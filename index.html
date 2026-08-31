@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>MODELO OSI // CYBERTRAIN</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root{
+  --bg:#050a0f;
+  --panel:#0a1420;
+  --panel2:#0d1a26;
+  --cyan:#00fff2;
+  --cyan-dim:#0a8a86;
+  --green:#39ff14;
+  --green-dim:#1f8a10;
+  --amber:#ffb000;
+  --red:#ff3860;
+  --purple:#b06bff;
+  --border:#12303a;
+  --text:#c8f5f0;
+  --text-dim:#5f8f8a;
+}
+
+*{box-sizing:border-box; margin:0; padding:0;}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'JetBrains Mono', monospace;
+  min-height:100vh;
+  padding:24px 16px 60px;
+  position:relative;
+  overflow-x:hidden;
+}
+
+body::before{
+  content:"";
+  position:fixed; inset:0;
+  background:repeating-linear-gradient(
+    0deg, rgba(0,255,242,0.025) 0px, rgba(0,255,242,0.025) 1px,
+    transparent 1px, transparent 3px
+  );
+  pointer-events:none; z-index:999;
+}
+body::after{
+  content:"";
+  position:fixed; inset:0;
+  background:radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 100%);
+  pointer-events:none; z-index:998;
+}
+
+.wrap{max-width:1000px; margin:0 auto; position:relative; z-index:1;}
+
+header{text-align:center; margin-bottom:20px; border-bottom:1px solid var(--border); padding-bottom:18px;}
+header h1{
+  font-family:'Orbitron', sans-serif; font-weight:900;
+  font-size:clamp(22px,5vw,38px); letter-spacing:4px; color:var(--cyan);
+  text-shadow:0 0 12px rgba(0,255,242,0.6), 0 0 30px rgba(0,255,242,0.25);
+}
+header .sub{
+  font-family:'Share Tech Mono', monospace; color:var(--text-dim);
+  letter-spacing:2px; font-size:12px; margin-top:6px; text-transform:uppercase;
+}
+.blink{animation:blink 1.4s infinite; color:var(--green);}
+@keyframes blink{50%{opacity:0.15;}}
+
+/* SEARCH */
+.search-box{
+  max-width:520px; margin:18px auto 6px; position:relative;
+}
+.search-box input{
+  width:100%; background:var(--panel); border:1px solid var(--border);
+  color:var(--cyan); font-family:'JetBrains Mono', monospace; font-size:13px;
+  padding:11px 14px 11px 34px; border-radius:6px; outline:none;
+  letter-spacing:0.5px; transition:border-color .2s, box-shadow .2s;
+}
+.search-box input:focus{border-color:var(--cyan); box-shadow:0 0 14px rgba(0,255,242,0.25);}
+.search-box::before{
+  content:"⌕"; position:absolute; left:12px; top:50%; transform:translateY(-50%);
+  color:var(--text-dim); font-size:15px; pointer-events:none;
+}
+.search-results{
+  max-width:520px; margin:8px auto 0; font-size:11.5px; color:var(--text-dim);
+  text-align:center; min-height:16px; letter-spacing:0.5px;
+}
+.search-results b{color:var(--green);}
+
+/* NAV TABS */
+.tabs{
+  display:flex; gap:8px; justify-content:center; flex-wrap:wrap;
+  margin:22px 0 24px; border-bottom:1px solid var(--border); padding-bottom:14px;
+}
+.tab-btn{
+  background:var(--panel); border:1px solid var(--border); color:var(--text-dim);
+  font-family:'Share Tech Mono', monospace; font-size:11.5px; letter-spacing:1px;
+  padding:9px 16px; border-radius:5px; cursor:pointer; text-transform:uppercase;
+  transition:all .2s;
+}
+.tab-btn:hover{color:var(--cyan); border-color:var(--cyan-dim);}
+.tab-btn.active{color:var(--bg); background:var(--cyan); border-color:var(--cyan); font-weight:700; box-shadow:0 0 14px rgba(0,255,242,0.4);}
+
+.view{display:none;}
+.view.active{display:block;}
+
+.hint{text-align:center; font-size:12px; color:var(--text-dim); margin-bottom:20px; letter-spacing:0.5px;}
+.hint b{color:var(--amber);}
+.section-title{
+  font-family:'Orbitron', sans-serif; font-size:15px; letter-spacing:2px;
+  color:var(--green); margin-bottom:14px; text-transform:uppercase;
+  display:flex; align-items:center; gap:8px;
+}
+.section-title::before{content:"▹"; color:var(--cyan);}
+
+/* ===== STACK VIEW ===== */
+.stack{display:flex; flex-direction:column; gap:10px;}
+.layer{
+  position:relative; border:1px solid var(--border);
+  background:linear-gradient(90deg, var(--panel) 0%, var(--panel2) 100%);
+  border-radius:6px; cursor:pointer; overflow:hidden; transition:all .25s ease;
+  clip-path:polygon(0 0, calc(100% - 14px) 0, 100% 100%, 0% 100%);
+  scroll-margin-top:20px;
+}
+.layer:hover{transform:translateX(6px); border-color:var(--cyan); box-shadow:0 0 18px rgba(0,255,242,0.25), inset 0 0 18px rgba(0,255,242,0.06);}
+.layer.active{border-color:var(--green); box-shadow:0 0 22px rgba(57,255,20,0.35), inset 0 0 20px rgba(57,255,20,0.08);}
+.layer.flash{animation:flash 1s ease;}
+@keyframes flash{0%,100%{border-color:var(--green);} 50%{border-color:var(--amber); box-shadow:0 0 30px rgba(255,176,0,0.6);}}
+
+.layer-head{display:flex; align-items:center; gap:16px; padding:14px 20px;}
+.l-num{font-family:'Orbitron', sans-serif; font-weight:900; font-size:26px; color:var(--cyan-dim); min-width:44px; transition:color .2s;}
+.layer:hover .l-num, .layer.active .l-num{color:var(--cyan); text-shadow:0 0 10px rgba(0,255,242,0.7);}
+.layer.active .l-num{color:var(--green); text-shadow:0 0 10px rgba(57,255,20,0.7);}
+.l-title{flex:1; min-width:0;}
+.l-name{font-family:'Orbitron', sans-serif; font-weight:700; font-size:15px; letter-spacing:1.5px; color:var(--text);}
+.l-name-en{font-size:10px; color:var(--text-dim); letter-spacing:1px; margin-top:2px;}
+.l-pdu{font-size:10px; color:var(--amber); border:1px solid rgba(255,176,0,0.4); padding:3px 8px; border-radius:3px; white-space:nowrap; letter-spacing:1px; background:rgba(255,176,0,0.06);}
+.l-chevron{color:var(--text-dim); font-size:14px; transition:transform .25s; min-width:14px; text-align:center;}
+.layer.active .l-chevron{transform:rotate(90deg); color:var(--green);}
+.l-examples{padding:0 20px 14px 60px; font-size:11px; color:var(--text-dim); letter-spacing:0.5px;}
+.l-examples b{color:var(--cyan-dim);}
+.l-detail{max-height:0; overflow:hidden; transition:max-height .4s ease; border-top:1px dashed transparent;}
+.layer.active .l-detail{max-height:900px; border-top:1px dashed var(--border);}
+.l-detail-inner{padding:18px 20px 22px 60px; display:grid; grid-template-columns:1fr 1fr; gap:14px 24px;}
+@media(max-width:640px){.l-detail-inner{grid-template-columns:1fr;} .l-examples{padding-left:20px;} .l-detail-inner{padding-left:20px;}}
+.field{border-left:2px solid var(--border); padding-left:10px;}
+.field.full{grid-column:1/-1;}
+.field h4{font-size:10px; color:var(--green); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:5px; font-family:'Share Tech Mono', monospace;}
+.field p{font-size:12.5px; line-height:1.55; color:var(--text);}
+.field ul{list-style:none; font-size:12px; line-height:1.7;}
+.field ul li::before{content:"▸ "; color:var(--cyan-dim);}
+.tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:2px;}
+.tag{font-size:10px; padding:3px 8px; border-radius:10px; border:1px solid var(--cyan-dim); color:var(--cyan); background:rgba(0,255,242,0.05); letter-spacing:0.5px;}
+.connector{height:14px; margin-left:44px; display:flex; align-items:center; color:var(--border); font-size:11px;}
+.connector .dots{flex:1; border-left:1px dashed var(--border); height:14px; margin-left:6px;}
+
+/* ===== TCP/IP COMPARISON ===== */
+.compare-grid{display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid var(--border); border-radius:8px; overflow:hidden;}
+.compare-col{padding:16px;}
+.compare-col.osi{border-right:1px solid var(--border); background:rgba(0,255,242,0.02);}
+.compare-col.tcpip{background:rgba(57,255,20,0.02);}
+.compare-head{
+  font-family:'Orbitron', sans-serif; font-size:12px; letter-spacing:2px; text-align:center;
+  padding:8px; border-radius:4px; margin-bottom:12px; text-transform:uppercase;
+}
+.compare-col.osi .compare-head{color:var(--cyan); border:1px solid var(--cyan-dim);}
+.compare-col.tcpip .compare-head{color:var(--green); border:1px solid var(--green-dim);}
+.osi-mini{
+  display:flex; align-items:center; gap:8px; padding:8px 10px; margin-bottom:6px;
+  background:var(--panel); border:1px solid var(--border); border-radius:4px; font-size:11.5px;
+}
+.osi-mini .n{color:var(--cyan-dim); font-weight:700; min-width:14px;}
+.tcpip-block{
+  border:1px solid var(--green-dim); border-radius:4px; margin-bottom:6px;
+  background:var(--panel); overflow:hidden;
+}
+.tcpip-block .tb-head{
+  padding:8px 10px; font-size:11.5px; color:var(--green); font-weight:700; letter-spacing:0.5px;
+  background:rgba(57,255,20,0.06); border-bottom:1px dashed var(--border);
+}
+.tcpip-block .tb-body{padding:6px 10px; font-size:10.5px; color:var(--text-dim); line-height:1.6;}
+@media(max-width:640px){.compare-grid{grid-template-columns:1fr;} .compare-col.osi{border-right:none; border-bottom:1px solid var(--border);}}
+
+/* ===== ENCAPSULATION ===== */
+.encap-controls{display:flex; gap:10px; justify-content:center; margin-bottom:18px; flex-wrap:wrap;}
+.encap-btn{
+  background:var(--panel); border:1px solid var(--cyan-dim); color:var(--cyan);
+  font-family:'Share Tech Mono', monospace; font-size:11.5px; letter-spacing:1px;
+  padding:9px 18px; border-radius:5px; cursor:pointer; text-transform:uppercase; transition:all .2s;
+}
+.encap-btn:hover{background:rgba(0,255,242,0.08); box-shadow:0 0 12px rgba(0,255,242,0.3);}
+.encap-btn:disabled{opacity:0.3; cursor:not-allowed;}
+.encap-direction{
+  text-align:center; font-size:11px; color:var(--amber); letter-spacing:2px; margin-bottom:18px; text-transform:uppercase;
+}
+
+/* rail: 7 capas horizontales mostrando en cuál va la simulación */
+.encap-rail{
+  display:flex; justify-content:center; gap:4px; margin-bottom:26px; flex-wrap:wrap;
+}
+.rail-dot{
+  display:flex; flex-direction:column; align-items:center; gap:5px;
+  padding:6px 8px; border-radius:5px; border:1px solid var(--border);
+  background:var(--panel); min-width:44px; transition:all .25s;
+}
+.rail-dot .rn{font-family:'Orbitron', sans-serif; font-size:12px; font-weight:700; color:var(--text-dim);}
+.rail-dot .rl{font-size:8px; color:var(--text-dim); letter-spacing:0.5px; text-transform:uppercase; white-space:nowrap;}
+.rail-dot.done{border-color:var(--cyan-dim); background:rgba(0,255,242,0.05);}
+.rail-dot.done .rn, .rail-dot.done .rl{color:var(--cyan-dim);}
+.rail-dot.current{border-color:var(--green); background:rgba(57,255,20,0.1); box-shadow:0 0 14px rgba(57,255,20,0.35); transform:scale(1.12);}
+.rail-dot.current .rn, .rail-dot.current .rl{color:var(--green);}
+
+.encap-stage{
+  display:flex; flex-direction:column; align-items:center; gap:16px; min-height:280px; justify-content:center;
+}
+
+/* sobres anidados */
+.nest-wrap{display:flex; align-items:center; justify-content:center; min-height:190px; padding:20px 10px;}
+.nest-box{
+  position:relative; display:flex; align-items:center; justify-content:center;
+  border:2px solid var(--border); border-radius:10px; padding:16px 22px;
+  transition:all .35s ease; animation:popIn .3s ease;
+}
+@keyframes popIn{from{opacity:0; transform:scale(0.85);} to{opacity:1; transform:scale(1);}}
+.nest-box.core{background:var(--panel2); border-color:var(--text-dim); color:var(--text); font-weight:700; font-size:12px; letter-spacing:1px; padding:14px 20px;}
+.nest-box.l7{border-color:var(--cyan);}
+.nest-box.l4{border-color:var(--purple);}
+.nest-box.l3{border-color:var(--amber);}
+.nest-box.l2{border-color:var(--green);}
+.nest-tab{
+  position:absolute; font-family:'Orbitron', sans-serif; font-size:9.5px; font-weight:700;
+  letter-spacing:1px; padding:2px 7px; border-radius:3px; color:var(--bg); white-space:nowrap;
+}
+.nest-tab.head{top:-10px; left:14px;}
+.nest-tab.tail{bottom:-10px; right:14px;}
+.nest-box.l7 .nest-tab{background:var(--cyan);}
+.nest-box.l4 .nest-tab{background:var(--purple);}
+.nest-box.l3 .nest-tab{background:var(--amber);}
+.nest-box.l2 .nest-tab{background:var(--green);}
+
+.nest-bits{
+  font-family:'JetBrains Mono', monospace; font-size:13px; letter-spacing:3px; color:var(--green);
+  background:var(--panel); border:2px solid var(--green); border-radius:10px; padding:20px 26px;
+  max-width:100%; overflow:hidden; white-space:nowrap; text-shadow:0 0 8px rgba(57,255,20,0.6);
+}
+
+.encap-label{font-family:'Orbitron', sans-serif; font-size:13px; letter-spacing:2px; color:var(--text); text-transform:uppercase; text-align:center;}
+.encap-sub{font-size:11.5px; color:var(--text-dim); text-align:center; max-width:520px; line-height:1.65;}
+.encap-progress{display:flex; gap:6px; margin-top:2px;}
+.encap-progress .dot{width:8px; height:8px; border-radius:50%; background:var(--border); transition:background .2s;}
+.encap-progress .dot.done{background:var(--cyan);}
+
+/* leyenda dinámica de siglas */
+.encap-legend{
+  display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:22px;
+  border-top:1px dashed var(--border); padding-top:18px; max-width:640px; margin-left:auto; margin-right:auto;
+}
+.legend-chip{
+  display:flex; gap:8px; align-items:flex-start; background:var(--panel); border:1px solid var(--border);
+  border-radius:6px; padding:8px 12px; font-size:11px; max-width:280px;
+}
+.legend-chip .lk{font-family:'Orbitron', sans-serif; font-weight:700; min-width:44px; font-size:11px;}
+.legend-chip .ld{color:var(--text-dim); line-height:1.5;}
+.legend-chip.l7 .lk{color:var(--cyan);}
+.legend-chip.l4 .lk{color:var(--purple);}
+.legend-chip.l3 .lk{color:var(--amber);}
+.legend-chip.l2 .lk{color:var(--green);}
+.legend-chip.data .lk{color:var(--text);}
+
+/* ===== HEXDUMP (captura real) ===== */
+.hexdump-summary{
+  text-align:center; font-size:12px; color:var(--text-dim); margin:16px 0 18px; letter-spacing:0.5px;
+}
+.hexdump-summary b{color:var(--green);}
+.hexdump-table-wrap{
+  overflow-x:auto; border:1px solid var(--border); border-radius:8px; background:var(--panel);
+  padding:14px 16px;
+}
+table.hexdump-table{border-collapse:collapse; font-family:'JetBrains Mono', monospace; font-size:12px; white-space:nowrap; margin:0 auto;}
+table.hexdump-table td{padding:3px 4px; vertical-align:middle;}
+.hx-offset{color:var(--text-dim); padding-right:14px !important; font-size:11px;}
+.hx-byte{
+  display:inline-block; padding:2px 4px; margin:0 1px; border-radius:3px; font-weight:700;
+}
+.hx-byte.l2{background:rgba(0,255,242,0.16); color:var(--cyan);}
+.hx-byte.l3{background:rgba(255,176,0,0.16); color:var(--amber);}
+.hx-byte.l4{background:rgba(176,107,255,0.18); color:var(--purple);}
+.hx-byte.data{background:rgba(57,255,20,0.14); color:var(--green);}
+.hx-ascii{padding-left:16px !important; color:var(--text-dim); font-size:11.5px; letter-spacing:1px;}
+.hx-ascii .hi{color:var(--text); font-weight:700;}
+
+.hexdump-truncnote{
+  text-align:center; font-size:11px; color:var(--text-dim); letter-spacing:1px; margin:14px 0;
+  border-top:1px dashed var(--border); border-bottom:1px dashed var(--border); padding:10px;
+}
+
+.hexdump-aside{
+  margin:16px 0; padding:14px 16px; border:1px solid var(--amber); border-radius:8px;
+  background:rgba(255,176,0,0.05);
+}
+.hexdump-aside h4{
+  font-size:10px; color:var(--amber); letter-spacing:1.5px; text-transform:uppercase;
+  margin-bottom:8px; font-family:'Share Tech Mono', monospace;
+}
+.hexdump-aside p{font-size:12px; color:var(--text); line-height:1.6;}
+.hexdump-aside table{margin-top:10px;}
+
+.hexdump-cmds{
+  margin-top:24px; border-top:1px dashed var(--border); padding-top:16px; max-width:560px; margin-left:auto; margin-right:auto;
+}
+.hexdump-cmds h4{
+  font-size:10px; color:var(--green); letter-spacing:1.5px; text-transform:uppercase;
+  margin-bottom:8px; font-family:'Share Tech Mono', monospace;
+}
+.hexdump-cmds pre{
+  background:var(--panel); border:1px solid var(--border); border-radius:6px; padding:12px 14px;
+  font-size:11.5px; color:var(--cyan); overflow-x:auto; line-height:1.6;
+}
+
+/* ===== FAQ ===== */
+.faq-list{display:flex; flex-direction:column; gap:8px;}
+.faq-item{
+  border:1px solid var(--border); border-radius:6px; background:var(--panel); overflow:hidden; cursor:pointer;
+}
+.faq-item:hover{border-color:var(--cyan-dim);}
+.faq-item.open{border-color:var(--green); box-shadow:0 0 14px rgba(57,255,20,0.15);}
+.faq-q{
+  display:flex; align-items:center; gap:12px; padding:13px 16px;
+  font-size:12.5px; color:var(--text); font-weight:700;
+}
+.faq-q .fq-icon{color:var(--cyan-dim); font-size:12px; min-width:14px; transition:transform .25s;}
+.faq-item.open .fq-icon{transform:rotate(90deg); color:var(--green);}
+.faq-a{max-height:0; overflow:hidden; transition:max-height .35s ease;}
+.faq-item.open .faq-a{max-height:260px;}
+.faq-a-inner{padding:0 16px 16px 42px; font-size:12px; color:var(--text-dim); line-height:1.65;}
+
+/* ===== QUIZ ===== */
+.quiz-score{
+  text-align:center; font-family:'Orbitron', sans-serif; font-size:13px; letter-spacing:2px;
+  color:var(--green); margin-bottom:6px;
+}
+.quiz-source{
+  text-align:center; font-size:10.5px; color:var(--text-dim); letter-spacing:1px; margin-bottom:20px;
+}
+.quiz-source.ai{color:var(--cyan-dim);}
+.quiz-list{display:flex; flex-direction:column; gap:18px;}
+.quiz-item{border:1px solid var(--border); border-radius:8px; background:var(--panel); padding:16px 18px;}
+.quiz-q{font-size:12.5px; color:var(--text); margin-bottom:12px; line-height:1.5;}
+.quiz-q .qn{color:var(--cyan-dim); font-family:'Orbitron', sans-serif; margin-right:6px;}
+.quiz-opts{display:flex; flex-direction:column; gap:7px;}
+.quiz-opt{
+  text-align:left; background:var(--panel2); border:1px solid var(--border); color:var(--text);
+  font-family:'JetBrains Mono', monospace; font-size:11.5px; padding:9px 12px; border-radius:5px;
+  cursor:pointer; transition:all .2s;
+}
+.quiz-opt:hover{border-color:var(--cyan-dim);}
+.quiz-item.answered .quiz-opt{cursor:default;}
+.quiz-item.answered .quiz-opt:hover{border-color:var(--border);}
+.quiz-opt.correct{border-color:var(--green); background:rgba(57,255,20,0.1); color:var(--green);}
+.quiz-opt.wrong{border-color:var(--red); background:rgba(255,56,96,0.1); color:var(--red);}
+.quiz-explain{
+  margin-top:10px; padding:10px 12px; border-left:2px solid var(--cyan-dim);
+  font-size:11.5px; color:var(--text-dim); line-height:1.6; display:none;
+}
+.quiz-item.answered .quiz-explain{display:block;}
+.quiz-actions{display:flex; justify-content:center; margin-top:22px;}
+
+/* ===== TROUBLESHOOTING ===== */
+.trouble-list{display:flex; flex-direction:column; gap:8px;}
+.trouble-item{
+  display:flex; align-items:center; gap:14px; background:var(--panel); border:1px solid var(--border);
+  border-radius:6px; padding:12px 16px; cursor:pointer; transition:all .2s;
+}
+.trouble-item:hover{border-color:var(--red); box-shadow:0 0 14px rgba(255,56,96,0.2); transform:translateX(4px);}
+.trouble-item .t-icon{color:var(--red); font-size:16px; min-width:20px;}
+.trouble-item .t-text{flex:1; font-size:12.5px; color:var(--text);}
+.trouble-item .t-arrow{font-size:10px; color:var(--text-dim); letter-spacing:1px; display:flex; align-items:center; gap:6px;}
+.t-layer-chip{
+  font-family:'Orbitron', sans-serif; font-size:11px; font-weight:700; color:var(--bg);
+  background:var(--green); padding:3px 9px; border-radius:10px;
+}
+
+/* ===== PORTS TABLE ===== */
+.ports-search{width:100%; max-width:340px; margin-bottom:16px;}
+.ports-search input{
+  width:100%; background:var(--panel); border:1px solid var(--border); color:var(--cyan);
+  font-family:'JetBrains Mono', monospace; font-size:12.5px; padding:9px 12px; border-radius:5px; outline:none;
+}
+.ports-search input:focus{border-color:var(--cyan);}
+table.ports{width:100%; border-collapse:collapse; font-size:12px;}
+table.ports thead th{
+  text-align:left; padding:9px 12px; color:var(--green); border-bottom:1px solid var(--border);
+  letter-spacing:1px; font-size:10.5px; text-transform:uppercase; font-family:'Share Tech Mono', monospace;
+}
+table.ports tbody td{padding:8px 12px; border-bottom:1px solid rgba(18,48,58,0.6); color:var(--text);}
+table.ports tbody tr:hover{background:rgba(0,255,242,0.04);}
+.port-num{color:var(--amber); font-weight:700;}
+.proto-chip{font-size:9.5px; padding:2px 7px; border-radius:8px; border:1px solid var(--cyan-dim); color:var(--cyan);}
+
+footer{margin-top:32px; text-align:center; font-size:10.5px; color:var(--text-dim); letter-spacing:1px;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1>MODELO OSI</h1>
+    <div class="sub">Open Systems Interconnection <span class="blink">█</span> 7 CAPAS // ISO/IEC 7498-1</div>
+  </header>
+
+  <div class="search-box">
+    <input type="text" id="globalSearch" placeholder="Buscar protocolo, puerto, dispositivo, síntoma... (ej: ARP, 443, cable)">
+  </div>
+  <div class="search-results" id="searchResults"></div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-view="stack">Capas OSI</button>
+    <button class="tab-btn" data-view="compare">OSI vs TCP/IP</button>
+    <button class="tab-btn" data-view="encap">Encapsulación</button>
+    <button class="tab-btn" data-view="hexdump">Captura real</button>
+    <button class="tab-btn" data-view="trouble">Troubleshooting</button>
+    <button class="tab-btn" data-view="ports">Puertos</button>
+    <button class="tab-btn" data-view="faq">FAQ</button>
+    <button class="tab-btn" data-view="quiz">Autoevaluación</button>
+  </div>
+
+  <!-- ===== VIEW: STACK ===== -->
+  <div class="view active" id="view-stack">
+    <div class="hint">Selecciona una capa para ver <b>función, protocolos, dispositivos y ejemplo real</b>.</div>
+    <div class="stack" id="stack"></div>
+  </div>
+
+  <!-- ===== VIEW: COMPARE ===== -->
+  <div class="view" id="view-compare">
+    <div class="section-title">OSI (7 capas) vs TCP/IP (4 capas)</div>
+    <div class="hint">En el trabajo diario (logs, entrevistas, documentación de red) es más común hablar en el modelo TCP/IP. Así se mapean entre sí.</div>
+    <div class="compare-grid">
+      <div class="compare-col osi">
+        <div class="compare-head">Modelo OSI</div>
+        <div id="osiMini"></div>
+      </div>
+      <div class="compare-col tcpip">
+        <div class="compare-head">Modelo TCP/IP</div>
+        <div id="tcpipBlocks"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== VIEW: ENCAPSULATION ===== -->
+  <div class="view" id="view-encap">
+    <div class="section-title">Simulador de encapsulación</div>
+    <div class="hint">Cada capa envuelve el dato en un "sobre" nuevo con su propia cabecera (y a veces cola). El receptor hace el proceso inverso: va abriendo sobres hasta llegar al dato original.</div>
+    <div class="encap-controls">
+      <button class="encap-btn" id="btnDown">▼ Simular envío (encapsular)</button>
+      <button class="encap-btn" id="btnUp">▲ Simular recepción (desencapsular)</button>
+      <button class="encap-btn" id="btnReset">↺ Reset</button>
+    </div>
+    <div class="encap-direction" id="encapDir">LISTO PARA SIMULAR</div>
+
+    <div class="encap-rail" id="encapRail"></div>
+
+    <div class="encap-stage">
+      <div class="nest-wrap" id="nestWrap"></div>
+      <div class="encap-label" id="encapLabel">DATOS DE APLICACIÓN</div>
+      <div class="encap-sub" id="encapSub">Pulsa "Simular envío" para ver cómo cada capa envuelve los datos con su propia cabecera, hasta convertirlos en bits.</div>
+      <div class="encap-progress" id="encapProgress"></div>
+    </div>
+
+    <div class="encap-legend" id="encapLegend"></div>
+  </div>
+
+  <!-- ===== VIEW: HEXDUMP (captura real) ===== -->
+  <div class="view" id="view-hexdump">
+    <div class="section-title">Captura real con tcpdump</div>
+    <div class="hint">Esto no es una simulación: son bytes reales de una captura <code>tcpdump -XX</code>. Mismos colores que en el simulador de sobres — cian = Ethernet, ámbar = IP, morado = TCP, verde = payload/datos.</div>
+
+    <div class="encap-controls">
+      <button class="encap-btn hexset-btn active" data-hexset="syn">SYN — 74 bytes (solo cabeceras)</button>
+      <button class="encap-btn hexset-btn" data-hexset="tls">ClientHello TLS — cabeceras + payload</button>
+    </div>
+
+    <div class="hexdump-summary" id="hexdumpSummary"></div>
+    <div class="hexdump-table-wrap"><table class="hexdump-table" id="hexdumpTable"></table></div>
+    <div class="hexdump-truncnote" id="hexdumpTrunc"></div>
+    <div class="hexdump-aside" id="hexdumpAside"></div>
+
+    <div class="encap-legend" id="hexdumpLegend"></div>
+
+    <div class="hexdump-cmds">
+      <h4>// Cómo capturarlo tú mismo</h4>
+      <pre>tcpdump -i eth0 -c 5 -XX 'tcp port 443' &amp;
+curl -s https://algun-dominio.com > /dev/null
+wait</pre>
+    </div>
+  </div>
+
+  <!-- ===== VIEW: TROUBLESHOOTING ===== -->
+  <div class="view" id="view-trouble">
+    <div class="section-title">Mapa de diagnóstico: síntoma → capa</div>
+    <div class="hint">Pensado para soporte técnico / SOC: identifica el síntoma y salta directo a la capa donde probablemente está el problema.</div>
+    <div class="trouble-list" id="troubleList"></div>
+  </div>
+
+  <!-- ===== VIEW: PORTS ===== -->
+  <div class="view" id="view-ports">
+    <div class="section-title">Puertos comunes (Capa 4 — Transporte)</div>
+    <div class="ports-search">
+      <input type="text" id="portSearch" placeholder="Filtrar por puerto, protocolo o servicio...">
+    </div>
+    <table class="ports">
+      <thead><tr><th>Puerto</th><th>Protocolo</th><th>Servicio</th><th>Uso</th></tr></thead>
+      <tbody id="portsBody"></tbody>
+    </table>
+  </div>
+
+  <!-- ===== VIEW: FAQ ===== -->
+  <div class="view" id="view-faq">
+    <div class="section-title">Dudas frecuentes</div>
+    <div class="hint">Las preguntas reales que salieron probando esta herramienta — las dejamos aquí porque si te las hiciste tú, se las hará cualquiera.</div>
+    <div class="faq-list" id="faqList"></div>
+  </div>
+
+  <!-- ===== VIEW: QUIZ ===== -->
+  <div class="view" id="view-quiz">
+    <div class="section-title">Autoevaluación rápida</div>
+    <div class="hint">10 preguntas, sin cronómetro. El objetivo es fijar lo que ya sabes, no presionar.</div>
+    <div class="quiz-score" id="quizScore">0 / 0 respondidas</div>
+    <div class="quiz-source" id="quizSource"></div>
+    <div class="quiz-list" id="quizList"></div>
+    <div class="quiz-actions">
+      <button class="encap-btn" id="quizReset">↺ Reiniciar test</button>
+    </div>
+  </div>
+
+  <footer>CYBERTRAIN LAB // OSI REFERENCE MODULE</footer>
+</div>
+
+<script>
+const layers = [
+  {
+    num:7, name:"APLICACIÓN", nameEn:"Application Layer", pdu:"DATA",
+    examples:"HTTP · HTTPS · FTP · SMTP · DNS · SSH",
+    funcion:"Es la capa más cercana al usuario. Proporciona los servicios de red directamente a las aplicaciones: navegador, cliente de correo, cliente FTP, etc. No es la aplicación en sí, sino la interfaz que la aplicación usa para comunicarse por la red.",
+    protocolos:["HTTP/HTTPS (web)","FTP/SFTP (archivos)","SMTP/IMAP/POP3 (correo)","DNS (resolución de nombres)","SSH/Telnet (acceso remoto)"],
+    dispositivos:["Ninguno físico — es software (navegador, apps, servidores de aplicación)"],
+    analogia:"Es como escribir una carta: decides el idioma y el contenido, pero no te preocupas de cómo llega el sobre.",
+    ataques:["Phishing","Inyección SQL","XSS","Explotación de APIs"],
+    keywords:["http","https","ftp","smtp","dns","ssh","navegador","phishing","sql","xss","api","aplicación","aplicacion"]
+  },
+  {
+    num:6, name:"PRESENTACIÓN", nameEn:"Presentation Layer", pdu:"DATA",
+    examples:"SSL/TLS · JPEG · MPEG · ASCII · Cifrado",
+    funcion:"Traduce, cifra y comprime los datos para que la capa de Aplicación los pueda interpretar. Se encarga del formato: codificación de caracteres, compresión de archivos y cifrado/descifrado.",
+    protocolos:["SSL/TLS (cifrado)","JPEG, PNG, GIF (imágenes)","MPEG (vídeo)","ASCII/Unicode (texto)"],
+    dispositivos:["Ninguno físico — funciones integradas en software/SO"],
+    analogia:"Es el traductor y el sobre sellado: convierte tu mensaje a un formato entendible y, si hace falta, lo cifra.",
+    ataques:["Downgrade de cifrado (SSL stripping)","Man-in-the-middle sobre TLS mal configurado"],
+    keywords:["ssl","tls","cifrado","jpeg","mpeg","ascii","presentación","presentacion","compresión","compresion"]
+  },
+  {
+    num:5, name:"SESIÓN", nameEn:"Session Layer", pdu:"DATA",
+    examples:"NetBIOS · RPC · PPTP · Sockets",
+    funcion:"Establece, mantiene y termina las sesiones de comunicación entre dos hosts. Gestiona el diálogo: quién habla, cuándo, y cómo se reanuda una sesión si se corta.",
+    protocolos:["NetBIOS","RPC (Remote Procedure Call)","PPTP","Sesiones de sockets"],
+    dispositivos:["Gateways de sesión (poco comunes como hardware dedicado)"],
+    analogia:"Es la llamada telefónica en sí: abres la conversación, la mantienes activa y la cierras al terminar.",
+    ataques:["Secuestro de sesión (session hijacking)","Fijación de sesión"],
+    keywords:["netbios","rpc","pptp","socket","sesión","sesion","hijacking","cookie"]
+  },
+  {
+    num:4, name:"TRANSPORTE", nameEn:"Transport Layer", pdu:"SEGMENTO / DATAGRAMA",
+    examples:"TCP · UDP · Puertos (0-65535)",
+    funcion:"Garantiza la entrega de datos de extremo a extremo. TCP ofrece conexión fiable con control de flujo y retransmisión; UDP es rápido pero sin garantías. Trabaja con puertos para identificar el proceso/aplicación de destino.",
+    protocolos:["TCP (fiable, orientado a conexión)","UDP (rápido, sin conexión)","Puertos: 80, 443, 22, 53, etc."],
+    dispositivos:["Firewalls (filtrado por puerto)","Balanceadores de carga L4"],
+    analogia:"Es el servicio de mensajería: TCP es el envío certificado con acuse de recibo; UDP es tirar la carta al buzón sin confirmación.",
+    ataques:["SYN Flood","Escaneo de puertos (Nmap)","UDP Flood (DDoS)"],
+    keywords:["tcp","udp","puerto","port","segmento","syn flood","nmap","firewall","transporte"]
+  },
+  {
+    num:3, name:"RED", nameEn:"Network Layer", pdu:"PAQUETE",
+    examples:"IP (IPv4/IPv6) · ICMP · Routing (OSPF, BGP)",
+    funcion:"Determina la mejor ruta para que los datos viajen de un host origen a un host destino a través de múltiples redes, usando direccionamiento lógico (IP) y enrutamiento.",
+    protocolos:["IPv4 / IPv6","ICMP (ping, traceroute)","OSPF, BGP, RIP (enrutamiento)","IPsec"],
+    dispositivos:["Routers","Firewalls L3","Capa 3 switches"],
+    analogia:"Es el sistema postal decidiendo la ruta entre ciudades y países hasta llegar al código postal correcto.",
+    ataques:["IP Spoofing","Ataques de enrutamiento (BGP hijacking)","Ping flood / Smurf attack"],
+    keywords:["ip","icmp","ping","traceroute","ospf","bgp","router","enrutamiento","paquete","ipsec","red"]
+  },
+  {
+    num:2, name:"ENLACE DE DATOS", nameEn:"Data Link Layer", pdu:"TRAMA (FRAME)",
+    examples:"Ethernet · Wi-Fi (802.11) · MAC · ARP · Switches",
+    funcion:"Transfiere datos entre dos nodos conectados directamente en la misma red física, usando direcciones MAC. Se divide en dos subcapas: LLC (control de enlace lógico) y MAC (control de acceso al medio). Detecta errores de la capa física.",
+    protocolos:["Ethernet (802.3)","Wi-Fi (802.11)","ARP (resolución MAC↔IP)","PPP","VLAN (802.1Q)"],
+    dispositivos:["Switches","Puentes (bridges)","Tarjetas de red (NIC)","Puntos de acceso Wi-Fi"],
+    analogia:"Es el cartero de tu propio barrio: entrega el paquete puerta a puerta usando el nombre exacto del vecino (MAC), no la dirección postal completa.",
+    ataques:["ARP Spoofing / Poisoning","MAC Flooding","VLAN Hopping"],
+    keywords:["ethernet","wifi","mac","arp","switch","trama","frame","vlan","nic","enlace"]
+  },
+  {
+    num:1, name:"FÍSICA", nameEn:"Physical Layer", pdu:"BITS",
+    examples:"Cables · Fibra óptica · Radiofrecuencia · Conectores",
+    funcion:"Transmite bits en bruto (0s y 1s) a través del medio físico: cables de cobre, fibra óptica u ondas de radio. Define voltajes, velocidades, conectores y especificaciones mecánicas/eléctricas.",
+    protocolos:["Ethernet físico (10/100/1000BASE-T)","USB","Bluetooth (radio)","DSL"],
+    dispositivos:["Cables (UTP, coaxial, fibra)","Hubs y repetidores","Antenas","Transceptores"],
+    analogia:"Es la carretera física: el asfalto por el que circula todo, sin importar el contenido de lo que se transporta.",
+    ataques:["Sabotaje/corte físico de cables","Escuchas por interceptación de señal (wiretapping)","Jamming de señal Wi-Fi"],
+    keywords:["cable","fibra","bits","bluetooth","usb","hub","antena","física","fisica","conector","jamming"]
+  },
+];
+
+const tcpip = [
+  {name:"APLICACIÓN", osi:[7,6,5], desc:"Equivale a Aplicación + Presentación + Sesión del modelo OSI. Ej: HTTP, DNS, SSH, TLS."},
+  {name:"TRANSPORTE", osi:[4], desc:"Idéntica a la capa 4 de OSI. Ej: TCP, UDP."},
+  {name:"INTERNET", osi:[3], desc:"Equivale a la capa de Red de OSI. Ej: IP, ICMP, routing."},
+  {name:"ACCESO AL MEDIO", osi:[2,1], desc:"Equivale a Enlace de Datos + Física. Ej: Ethernet, Wi-Fi, cableado."},
+];
+
+const troubleshooting = [
+  {icon:"🔌", text:"No hay luces en la tarjeta de red / cable desconectado", layer:1},
+  {icon:"📡", text:"El Wi-Fi no detecta ninguna red o la señal es muy débil", layer:1},
+  {icon:"🖧", text:"El PC no obtiene IP por DHCP / conflicto de IP en la red", layer:3},
+  {icon:"🧭", text:"'Destino inalcanzable' o el ping no sale de la red local", layer:2},
+  {icon:"🔁", text:"ARP muestra una MAC incorrecta o duplicada (posible spoofing)", layer:2},
+  {icon:"🌍", text:"Hace ping a una IP pero no resuelve el nombre de dominio", layer:7},
+  {icon:"🚦", text:"Traceroute se detiene en un salto concreto de la ruta", layer:3},
+  {icon:"🔒", text:"El puerto está cerrado / filtrado (nmap, firewall)", layer:4},
+  {icon:"⏱️", text:"La conexión TCP se abre pero se corta a los pocos segundos", layer:4},
+  {icon:"🖥️", text:"La web carga pero muestra 'certificado no válido'", layer:6},
+  {icon:"💬", text:"Se corta la sesión VPN/RDP tras un rato de inactividad", layer:5},
+  {icon:"🐌", text:"La app carga pero muy lenta / timeout de la propia aplicación", layer:7},
+  {icon:"🧱", text:"Error 502/504 desde un proxy o balanceador", layer:4},
+];
+
+const ports = [
+  {port:20, proto:"TCP", service:"FTP (datos)", use:"Transferencia de archivos - canal de datos"},
+  {port:21, proto:"TCP", service:"FTP (control)", use:"Transferencia de archivos - canal de control"},
+  {port:22, proto:"TCP", service:"SSH", use:"Acceso remoto seguro / SCP / SFTP"},
+  {port:23, proto:"TCP", service:"Telnet", use:"Acceso remoto sin cifrar (obsoleto/inseguro)"},
+  {port:25, proto:"TCP", service:"SMTP", use:"Envío de correo electrónico"},
+  {port:53, proto:"TCP/UDP", service:"DNS", use:"Resolución de nombres de dominio"},
+  {port:67, proto:"UDP", service:"DHCP (servidor)", use:"Asignación automática de IP"},
+  {port:68, proto:"UDP", service:"DHCP (cliente)", use:"Asignación automática de IP"},
+  {port:69, proto:"UDP", service:"TFTP", use:"Transferencia simple de archivos"},
+  {port:80, proto:"TCP", service:"HTTP", use:"Tráfico web sin cifrar"},
+  {port:110, proto:"TCP", service:"POP3", use:"Descarga de correo electrónico"},
+  {port:123, proto:"UDP", service:"NTP", use:"Sincronización horaria"},
+  {port:135, proto:"TCP", service:"MS-RPC", use:"Llamadas a procedimiento remoto Windows"},
+  {port:137, proto:"UDP", service:"NetBIOS (nombre)", use:"Resolución de nombres en red Windows"},
+  {port:139, proto:"TCP", service:"NetBIOS (sesión)", use:"Compartición de archivos Windows"},
+  {port:143, proto:"TCP", service:"IMAP", use:"Gestión de correo en servidor"},
+  {port:161, proto:"UDP", service:"SNMP", use:"Monitorización de dispositivos de red"},
+  {port:389, proto:"TCP", service:"LDAP", use:"Directorio (Active Directory, etc.)"},
+  {port:443, proto:"TCP", service:"HTTPS", use:"Tráfico web cifrado (TLS/SSL)"},
+  {port:445, proto:"TCP", service:"SMB", use:"Compartición de archivos/impresoras Windows"},
+  {port:514, proto:"UDP", service:"Syslog", use:"Envío de logs a servidor centralizado (SIEM)"},
+  {port:587, proto:"TCP", service:"SMTP (submission)", use:"Envío de correo autenticado"},
+  {port:636, proto:"TCP", service:"LDAPS", use:"LDAP cifrado con TLS"},
+  {port:993, proto:"TCP", service:"IMAPS", use:"IMAP cifrado con TLS"},
+  {port:995, proto:"TCP", service:"POP3S", use:"POP3 cifrado con TLS"},
+  {port:1433, proto:"TCP", service:"MS SQL Server", use:"Base de datos Microsoft SQL"},
+  {port:3306, proto:"TCP", service:"MySQL", use:"Base de datos MySQL/MariaDB"},
+  {port:3389, proto:"TCP", service:"RDP", use:"Escritorio remoto Windows"},
+  {port:5432, proto:"TCP", service:"PostgreSQL", use:"Base de datos PostgreSQL"},
+  {port:5900, proto:"TCP", service:"VNC", use:"Escritorio remoto multiplataforma"},
+  {port:8080, proto:"TCP", service:"HTTP-alt / proxy", use:"Servidores web alternativos, proxies"},
+];
+
+/* ============ RENDER STACK ============ */
+const stackEl = document.getElementById('stack');
+layers.forEach((l, idx) => {
+  const layerEl = document.createElement('div');
+  layerEl.className = 'layer';
+  layerEl.dataset.num = l.num;
+  layerEl.id = `layer-${l.num}`;
+
+  layerEl.innerHTML = `
+    <div class="layer-head">
+      <div class="l-num">${l.num}</div>
+      <div class="l-title">
+        <div class="l-name">${l.name}</div>
+        <div class="l-name-en">${l.nameEn}</div>
+      </div>
+      <div class="l-pdu">${l.pdu}</div>
+      <div class="l-chevron">▶</div>
+    </div>
+    <div class="l-examples"><b>Ej:</b> ${l.examples}</div>
+    <div class="l-detail">
+      <div class="l-detail-inner">
+        <div class="field full"><h4>// Función</h4><p>${l.funcion}</p></div>
+        <div class="field"><h4>// Protocolos clave</h4><ul>${l.protocolos.map(p=>`<li>${p}</li>`).join('')}</ul></div>
+        <div class="field"><h4>// Dispositivos asociados</h4><ul>${l.dispositivos.map(d=>`<li>${d}</li>`).join('')}</ul></div>
+        <div class="field full"><h4>// Analogía</h4><p>${l.analogia}</p></div>
+        <div class="field full"><h4>// Vectores de ataque típicos</h4><div class="tags">${l.ataques.map(a=>`<span class="tag">${a}</span>`).join('')}</div></div>
+      </div>
+    </div>
+  `;
+
+  layerEl.addEventListener('click', () => {
+    const wasActive = layerEl.classList.contains('active');
+    document.querySelectorAll('.layer.active').forEach(el => el.classList.remove('active'));
+    if(!wasActive) layerEl.classList.add('active');
+  });
+
+  stackEl.appendChild(layerEl);
+
+  if(idx < layers.length - 1){
+    const conn = document.createElement('div');
+    conn.className = 'connector';
+    conn.innerHTML = `<div class="dots"></div>`;
+    stackEl.appendChild(conn);
+  }
+});
+stackEl.querySelector('.layer').classList.add('active');
+
+function openLayer(num, flash){
+  document.querySelectorAll('.layer.active').forEach(el => el.classList.remove('active'));
+  const el = document.getElementById(`layer-${num}`);
+  el.classList.add('active');
+  document.querySelector('[data-view="stack"]').click();
+  setTimeout(()=> el.scrollIntoView({behavior:'smooth', block:'center'}), 60);
+  if(flash){ el.classList.add('flash'); setTimeout(()=>el.classList.remove('flash'), 1000); }
+}
+
+/* ============ TABS ============ */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('view-' + btn.dataset.view).classList.add('active');
+  });
+});
+
+/* ============ COMPARE VIEW ============ */
+const osiMiniEl = document.getElementById('osiMini');
+layers.forEach(l => {
+  osiMiniEl.innerHTML += `<div class="osi-mini"><span class="n">${l.num}</span> ${l.name}</div>`;
+});
+const tcpipEl = document.getElementById('tcpipBlocks');
+[...tcpip].reverse().forEach(t => {
+  tcpipEl.innerHTML += `
+    <div class="tcpip-block">
+      <div class="tb-head">${t.name} <span style="color:var(--text-dim); font-weight:400;">(OSI ${t.osi.join('-')})</span></div>
+      <div class="tb-body">${t.desc}</div>
+    </div>`;
+});
+
+/* ============ ENCAPSULATION SIMULATOR ============ */
+const glossary = {
+  DATOS:{cls:'data', def:'La información real que quieres enviar — ej. el cuerpo de una petición web o un archivo.'},
+  HTTP:{cls:'l7', def:'Cabecera de aplicación (capas 7-5): protocolo, método, formato de los datos.'},
+  TCP:{cls:'l4', def:'Cabecera de transporte (capa 4): puerto origen/destino y control de la conexión.'},
+  IP:{cls:'l3', def:'Cabecera de red (capa 3): dirección IP origen y destino, TTL.'},
+  MAC:{cls:'l2', def:'Cabecera de enlace (capa 2): dirección MAC origen y destino en la red local.'},
+  FCS:{cls:'l2', def:'Cola de la trama (capa 2): checksum para detectar si llegó corrupta.'},
+  BITS:{cls:'data', def:'Todo lo anterior convertido en señal (eléctrica, óptica o radio) para viajar por el medio físico.'},
+};
+
+const railLayers = [
+  {n:7, l:'App'}, {n:6, l:'Pres.'}, {n:5, l:'Sesión'}, {n:4, l:'Transp.'}, {n:3, l:'Red'}, {n:2, l:'Enlace'}, {n:1, l:'Física'}
+];
+
+const encapSteps = [
+  {layerNum:7, label:"DATOS DE APLICACIÓN", sub:"El usuario genera datos: por ejemplo, una petición HTTP.", stack:[{key:'DATOS', cls:'core'}]},
+  {layerNum:7, label:"CAPA 7 — APLICACIÓN", sub:"Se envuelve el dato con la cabecera del protocolo de aplicación (ej. HTTP).", stack:[{key:'DATOS', cls:'core'}, {key:'HTTP', cls:'l7'}]},
+  {layerNum:6, label:"CAPA 6 — PRESENTACIÓN", sub:"Aquí se cifraría/formatearía el contenido (ej. TLS). En las redes TCP/IP reales no añade una cabecera aparte y separada: va integrada dentro de los datos de aplicación.", stack:[{key:'DATOS', cls:'core'}, {key:'HTTP', cls:'l7'}]},
+  {layerNum:5, label:"CAPA 5 — SESIÓN", sub:"Gestiona el diálogo de la conexión (abrir, mantener, cerrar sesión). Tampoco añade una cabecera visible propia en la mayoría de implementaciones TCP/IP — por eso el sobre no cambia en este paso.", stack:[{key:'DATOS', cls:'core'}, {key:'HTTP', cls:'l7'}]},
+  {layerNum:4, label:"SEGMENTO — Capa 4 Transporte", sub:"TCP/UDP envuelve todo con puertos origen/destino y control de la conexión.", stack:[{key:'DATOS', cls:'core'}, {key:'HTTP', cls:'l7'}, {key:'TCP', cls:'l4'}]},
+  {layerNum:3, label:"PAQUETE — Capa 3 Red", sub:"Se añade la cabecera IP con dirección origen y destino.", stack:[{key:'DATOS', cls:'core'}, {key:'HTTP', cls:'l7'}, {key:'TCP', cls:'l4'}, {key:'IP', cls:'l3'}]},
+  {layerNum:2, label:"TRAMA — Capa 2 Enlace de Datos", sub:"Se envuelve con cabecera MAC (origen/destino) y una cola FCS que sirve para detectar errores de transmisión.", stack:[{key:'DATOS', cls:'core'}, {key:'HTTP', cls:'l7'}, {key:'TCP', cls:'l4'}, {key:'IP', cls:'l3'}, {key:'MAC', cls:'l2', trailer:'FCS'}]},
+  {layerNum:1, label:"BITS — Capa 1 Física", sub:"Toda la trama se convierte en una secuencia de 0 y 1 que viaja como señal eléctrica, óptica o de radio.", bits:true},
+];
+
+let encapStep = 0;
+const nestWrap = document.getElementById('nestWrap');
+const encapLabel = document.getElementById('encapLabel');
+const encapSub = document.getElementById('encapSub');
+const encapDir = document.getElementById('encapDir');
+const encapProgress = document.getElementById('encapProgress');
+const encapRail = document.getElementById('encapRail');
+const encapLegend = document.getElementById('encapLegend');
+const btnDown = document.getElementById('btnDown');
+const btnUp = document.getElementById('btnUp');
+const btnReset = document.getElementById('btnReset');
+
+function buildNest(stack){
+  // stack va de dentro (DATOS) hacia afuera (última capa añadida)
+  let html = `<div class="nest-box core">${stack[0].key}</div>`;
+  for(let i = 1; i < stack.length; i++){
+    const layer = stack[i];
+    const tailTab = layer.trailer ? `<span class="nest-tab tail">${layer.trailer}</span>` : '';
+    html = `<div class="nest-box ${layer.cls}"><span class="nest-tab head">${layer.key}</span>${html}${tailTab}</div>`;
+  }
+  return html;
+}
+
+function renderRail(step){
+  const stackCls = step.stack ? step.stack.map(x=>x.cls) : [];
+  const done = new Set();
+  if(step.bits){ railLayers.forEach(r=>done.add(r.n)); }
+  else{
+    if(stackCls.includes('l7')) [5,6,7].forEach(n=>done.add(n));
+    if(stackCls.includes('l4')) done.add(4);
+    if(stackCls.includes('l3')) done.add(3);
+    if(stackCls.includes('l2')) done.add(2);
+  }
+  encapRail.innerHTML = railLayers.map(r => {
+    let cls = '';
+    if(r.n === step.layerNum) cls = 'current';
+    else if(done.has(r.n)) cls = 'done';
+    return `<div class="rail-dot ${cls}"><span class="rn">${r.n}</span><span class="rl">${r.l}</span></div>`;
+  }).join('');
+}
+
+function renderLegend(step){
+  let keys = [];
+  if(step.bits){ keys = ['BITS']; }
+  else{
+    keys = step.stack.map(x=>x.key);
+    if(step.stack.some(x=>x.trailer)) keys.push('FCS');
+  }
+  encapLegend.innerHTML = keys.map(k => {
+    const g = glossary[k];
+    return `<div class="legend-chip ${g.cls}"><span class="lk">${k}</span><span class="ld">${g.def}</span></div>`;
+  }).join('');
+}
+
+function renderEncap(){
+  const s = encapSteps[encapStep];
+  nestWrap.innerHTML = s.bits
+    ? `<div class="nest-bits" id="bitsStream">01001000 01010100 01010100 01010000...</div>`
+    : buildNest(s.stack);
+  encapLabel.textContent = s.label;
+  encapSub.textContent = s.sub;
+  encapProgress.innerHTML = encapSteps.map((_,i)=>`<div class="dot ${i<=encapStep?'done':''}"></div>`).join('');
+  renderRail(s);
+  renderLegend(s);
+  btnDown.disabled = encapStep >= encapSteps.length - 1;
+  btnUp.disabled = encapStep <= 0;
+}
+btnDown.addEventListener('click', ()=>{
+  encapDir.textContent = 'ENVIANDO ▼ ENCAPSULANDO (emisor)';
+  if(encapStep < encapSteps.length - 1) encapStep++;
+  renderEncap();
+});
+btnUp.addEventListener('click', ()=>{
+  encapDir.textContent = 'RECIBIENDO ▲ DESENCAPSULANDO (receptor)';
+  if(encapStep > 0) encapStep--;
+  renderEncap();
+});
+btnReset.addEventListener('click', ()=>{
+  encapStep = 0; encapDir.textContent = 'LISTO PARA SIMULAR'; renderEncap();
+});
+renderEncap();
+
+/* ============ TROUBLESHOOTING ============ */
+const troubleList = document.getElementById('troubleList');
+troubleshooting.forEach(t => {
+  const item = document.createElement('div');
+  item.className = 'trouble-item';
+  item.innerHTML = `
+    <div class="t-icon">${t.icon}</div>
+    <div class="t-text">${t.text}</div>
+    <div class="t-arrow">Capa probable <span class="t-layer-chip">${t.layer}</span></div>
+  `;
+  item.addEventListener('click', ()=> openLayer(t.layer, true));
+  troubleList.appendChild(item);
+});
+
+/* ============ PORTS TABLE ============ */
+const portsBody = document.getElementById('portsBody');
+function renderPorts(filter=''){
+  const f = filter.toLowerCase();
+  portsBody.innerHTML = ports
+    .filter(p => !f || String(p.port).includes(f) || p.proto.toLowerCase().includes(f) || p.service.toLowerCase().includes(f) || p.use.toLowerCase().includes(f))
+    .map(p => `
+      <tr>
+        <td class="port-num">${p.port}</td>
+        <td><span class="proto-chip">${p.proto}</span></td>
+        <td>${p.service}</td>
+        <td style="color:var(--text-dim)">${p.use}</td>
+      </tr>`).join('');
+}
+renderPorts();
+document.getElementById('portSearch').addEventListener('input', e => renderPorts(e.target.value));
+
+/* ============ HEXDUMP (captura real) ============ */
+// Paquetes reales capturados con tcpdump -XX (curl -> google.com:443).
+// Bytes en crudo — el layout de capas se calcula, no se hardcodea.
+const hexExamples = {
+  syn: {
+    title: "SYN — apertura de conexión TCP",
+    summaryHtml: 'Handshake TCP, primer paso. <b>74 bytes en total</b> — 100% cabeceras, <b>0 bytes de payload</b> (flag SYN, sin datos aún).',
+    rows: [
+      ['72','c2','21','ee','d6','97','2a','c8','c6','4a','10','bb','08','00','45','00'],
+      ['00','3c','b8','8f','40','00','40','06','75','2f','ac','11','00','02','8e','fb'],
+      ['d1','ee','a5','be','01','bb','2d','5c','ed','dd','00','00','00','00','a0','02'],
+      ['ff','d7','0d','2c','00','00','02','04','ff','d7','04','02','08','0a','c4','e6'],
+      ['1d','ea','00','00','00','00','01','03','03','09'],
+    ],
+    ranges:[{from:0,to:13,cls:'l2'},{from:14,to:33,cls:'l3'},{from:34,to:73,cls:'l4'}],
+    truncated:false,
+    aside:null
+  },
+  tls: {
+    title: "ClientHello TLS — primer mensaje cifrado",
+    summaryHtml: 'Mismo flujo, pero con datos reales dentro: el <b>ClientHello</b> de TLS. Aquí sí hay payload — <b>~1690 bytes</b> de cabeceras TLS (cifrados soportados, SNI, ALPN, claves).',
+    rows: [
+      ['72','c2','21','ee','d6','97','2a','c8','c6','4a','10','bb','08','00','45','00'],
+      ['06','d2','b8','91','40','00','40','06','6e','97','ac','11','00','02','8e','fb'],
+      ['d1','ee','a5','be','01','bb','2d','5c','ed','de','83','8b','6e','a7','80','18'],
+      ['00','80','13','c2','00','00','01','01','08','0a','c4','e6','1e','17','7c','d5'],
+      ['b0','59','16','03','01','06','99','01','00','06','95','03','03','57','91','ed'],
+    ],
+    ranges:[{from:0,to:13,cls:'l2'},{from:14,to:33,cls:'l3'},{from:34,to:65,cls:'l4'}],
+    truncated:true,
+    aside:{
+      offset:'0x0150',
+      bytes:['0f','00','0d','00','00','0a','67','6f','6f','67','6c','65','2e','63','6f','6d'],
+      highlightFrom:6, // desde este índice de la fila es el hostname en ASCII
+      title:'SNI (Server Name Indication) — ~336 bytes más adelante en el mismo paquete',
+      text:'Aunque toda la conexión va cifrada por TLS, el nombre de dominio al que te conectas viaja aquí en texto plano, sin cifrar. Es lo que un firewall/SOC lee para filtrar o detectar tráfico por dominio sin descifrar nada.'
+    }
+  }
+};
+
+function byteToAscii(hex){
+  const v = parseInt(hex, 16);
+  return (v >= 0x20 && v <= 0x7e) ? String.fromCharCode(v) : '.';
+}
+function classifyByte(absIndex, ranges){
+  for(const r of ranges){ if(absIndex >= r.from && absIndex <= r.to) return r.cls; }
+  return 'data';
+}
+
+function renderHexdump(key){
+  const ex = hexExamples[key];
+  document.getElementById('hexdumpSummary').innerHTML = ex.summaryHtml;
+
+  let absIdx = 0;
+  let tableHtml = '';
+  ex.rows.forEach(row => {
+    const offsetStr = '0x' + absIdx.toString(16).padStart(4,'0');
+    let hexCells = '';
+    let asciiCells = '';
+    row.forEach(b => {
+      const cls = classifyByte(absIdx, ex.ranges);
+      hexCells += `<span class="hx-byte ${cls}">${b}</span>`;
+      const ch = byteToAscii(b);
+      asciiCells += (ch !== '.' ) ? `<span class="hi">${ch}</span>` : '.';
+      absIdx++;
+    });
+    tableHtml += `<tr><td class="hx-offset">${offsetStr}:</td><td>${hexCells}</td><td class="hx-ascii">${asciiCells}</td></tr>`;
+  });
+  document.getElementById('hexdumpTable').innerHTML = tableHtml;
+
+  document.getElementById('hexdumpTrunc').innerHTML = ex.truncated
+    ? '⋮ &nbsp; resto del paquete omitido aquí (cipher suites soportados, extensiones TLS, claves Diffie-Hellman efímeras) &nbsp; ⋮'
+    : '';
+
+  const asideEl = document.getElementById('hexdumpAside');
+  if(ex.aside){
+    let asideHex = '', asideAscii = '';
+    ex.aside.bytes.forEach((b, i) => {
+      const isHost = i >= ex.aside.highlightFrom;
+      asideHex += `<span class="hx-byte ${isHost ? 'data' : ''}" style="${isHost?'':'opacity:.5'}">${b}</span>`;
+      const ch = byteToAscii(b);
+      asideAscii += isHost ? `<span class="hi">${ch}</span>` : (ch !== '.' ? ch : '.');
+    });
+    asideEl.innerHTML = `
+      <h4>// ${ex.aside.title}</h4>
+      <p>${ex.aside.text}</p>
+      <table class="hexdump-table"><tr><td class="hx-offset">${ex.aside.offset}:</td><td>${asideHex}</td><td class="hx-ascii">${asideAscii}</td></tr></table>
+    `;
+    asideEl.style.display = 'block';
+  } else {
+    asideEl.style.display = 'none';
+  }
+
+  document.getElementById('hexdumpLegend').innerHTML = `
+    <div class="legend-chip l7" style="border-color:var(--cyan-dim)"><span class="lk" style="color:var(--cyan)">L2</span><span class="ld">Ethernet — MAC origen/destino (14 bytes)</span></div>
+    <div class="legend-chip l3"><span class="lk">L3</span><span class="ld">IP — dirección origen/destino (20 bytes)</span></div>
+    <div class="legend-chip l4"><span class="lk">L4</span><span class="ld">TCP — puertos, flags, control de conexión</span></div>
+    <div class="legend-chip data"><span class="lk">DATA</span><span class="ld">Payload — lo que transporta TCP por dentro (ej. TLS)</span></div>
+  `;
+}
+
+document.querySelectorAll('.hexset-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.hexset-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    renderHexdump(btn.dataset.hexset);
+  });
+});
+renderHexdump('syn');
+
+/* ============ FAQ ============ */
+const faqData = [
+  {
+    q:"El simulador de encapsulación saltaba de la capa 7 a la 4 sin pasar por 6 y 5. ¿Es un fallo?",
+    a:"No es un fallo del modelo, es cómo funciona TCP/IP de verdad: las capas 5 (Sesión) y 6 (Presentación) no generan una cabecera propia y visible en el cable — van integradas dentro de los datos de aplicación. El simulador ahora se detiene en las 7 capas para que quede claro, pero en esos dos pasos el \"sobre\" no cambia visualmente a propósito."
+  },
+  {
+    q:"En la trama (capa 2) aparecía FCS de la nada, sin explicar qué era.",
+    a:"FCS (Frame Check Sequence) es la cola de la trama: un checksum que el receptor usa para comprobar que no ha llegado corrupta. No es una capa nueva ni algo aparte — es la segunda mitad de la envoltura de la capa 2 (cabecera MAC delante + cola FCS detrás)."
+  },
+  {
+    q:"Todo esto es muy bonito en el diagrama, pero ¿cómo se hace en físico?",
+    a:"No hay sobres de verdad. El sistema operativo va concatenando bytes en un buffer de memoria, capa por capa, según baja por el stack de red. Lo único que se vuelve físico de verdad es en la capa 1, cuando la tarjeta de red convierte esa tira final de bits en voltaje (cobre), luz (fibra) u ondas de radio (Wi-Fi)."
+  },
+  {
+    q:"¿Cada bloque que muestra tcpdump es un paquete distinto?",
+    a:"Sí. La primera línea es el resumen que tcpdump ya interpreta por ti (IP/puerto origen, destino, flags...). Las líneas de abajo (0x0000, 0x0010, 0x0020...) son los mismos bytes en crudo, en hexadecimal, organizados en filas de 16 — el offset es solo la posición del byte dentro de ese paquete."
+  },
+  {
+    q:"¿Por qué un paquete (el ClientHello TLS) es tanto más grande que otro (el SYN)?",
+    a:"El SYN solo lleva cabeceras (Ethernet+IP+TCP), sin datos — por eso son ~74 bytes. El ClientHello, en cambio, lleva un payload real dentro del TCP: la lista de cifrados que soporta el cliente, el nombre de dominio (SNI), extensiones ALPN y material criptográfico para el intercambio de claves — de ahí que pase de cientos a más de 1.700 bytes."
+  },
+  {
+    q:"Si TLS cifra la conexión, ¿por qué se ve \"google.com\" en texto plano en la captura?",
+    a:"El campo SNI (Server Name Indication) del ClientHello va sin cifrar a propósito: el servidor necesita saber a qué dominio corresponde la petición antes de que empiece el cifrado (para servir el certificado correcto). Es justo lo que un firewall o un SOC usa para filtrar o detectar tráfico por dominio sin necesidad de descifrar nada."
+  },
+  {
+    q:"¿Por qué usamos el puerto 443 en las pruebas y no otro?",
+    a:"Porque el tráfico era HTTPS (curl a una URL https://) — el puerto por defecto para HTTPS es el 443. Si hubiera sido http:// sin la 's', habría sido el puerto 80, y la captura habría ido sin cifrar."
+  },
+  {
+    q:"¿Necesito instalar Wireshark para ver todo esto?",
+    a:"No necesariamente. tcpdump con -XX ya te saca hex+ASCII por terminal, que es justo lo que usamos aquí. Si quieres una vista más gráfica sin GUI, tshark -V te desglosa cada capa como bloques separados (Frame → Ethernet → IP → TCP...), muy parecido a la vista de \"sobres anidados\" de este simulador."
+  },
+];
+
+function renderFaq(){
+  const list = document.getElementById('faqList');
+  list.innerHTML = faqData.map((item, i) => `
+    <div class="faq-item" data-idx="${i}">
+      <div class="faq-q"><span class="fq-icon">▶</span>${item.q}</div>
+      <div class="faq-a"><div class="faq-a-inner">${item.a}</div></div>
+    </div>
+  `).join('');
+  list.querySelectorAll('.faq-item').forEach(el => {
+    el.addEventListener('click', () => el.classList.toggle('open'));
+  });
+}
+renderFaq();
+
+/* ============ QUIZ ============ */
+// Banco estático de reserva — se usa si el JSON generado por Groq
+// todavía no existe (primer despliegue, antes de la primera ejecución
+// del Action) o si el fetch falla por cualquier motivo.
+const STATIC_QUIZ_DATA = [
+  {q:"¿Cuál es la PDU (unidad de datos) de la capa de Red?", opts:["Trama","Paquete","Segmento","Bits"], correct:1,
+    exp:"En la capa 3 (Red) la unidad se llama paquete. La trama es capa 2, el segmento capa 4, y los bits son capa 1."},
+  {q:"¿Qué dirección usa la capa de Enlace de Datos para identificar dispositivos en la misma red local?", opts:["Dirección IP","Puerto TCP","Dirección MAC","Nombre de dominio"], correct:2,
+    exp:"La capa 2 trabaja con direcciones MAC (físicas de la tarjeta de red). La IP es capa 3, el puerto es capa 4."},
+  {q:"¿Qué protocolo es fiable, orientado a conexión y usa control de flujo?", opts:["UDP","ICMP","ARP","TCP"], correct:3,
+    exp:"TCP garantiza la entrega con acuse de recibo y retransmisión. UDP es rápido pero sin garantías."},
+  {q:"¿En qué capa trabaja un router para decidir la mejor ruta?", opts:["Capa 2 - Enlace","Capa 3 - Red","Capa 4 - Transporte","Capa 7 - Aplicación"], correct:1,
+    exp:"El enrutamiento (routing) es función de la capa 3, usando direccionamiento IP."},
+  {q:"¿Qué puerto usa HTTPS por defecto?", opts:["21","80","443","3389"], correct:2,
+    exp:"443/TCP es HTTPS. El 80 es HTTP sin cifrar, el 21 es FTP, el 3389 es RDP."},
+  {q:"En el modelo TCP/IP de 4 capas, ¿qué capa agrupa Aplicación + Presentación + Sesión del modelo OSI?", opts:["Capa de Acceso al medio","Capa de Internet","Capa de Aplicación","Capa de Transporte"], correct:2,
+    exp:"TCP/IP simplifica las 3 capas altas de OSI (7,6,5) en una sola: Aplicación."},
+  {q:"¿Qué añade la cabecera TCP que no tiene la cabecera IP?", opts:["Dirección MAC","Puertos origen/destino","TTL","EtherType"], correct:1,
+    exp:"Los puertos son cosa de la capa 4 (TCP/UDP). La IP se ocupa de direccionamiento de red, no de puertos."},
+  {q:"¿Qué es el FCS en una trama Ethernet?", opts:["Una extensión de la cabecera IP","Un checksum al final de la trama para detectar errores","El nombre del protocolo de capa 7","Una clave de cifrado TLS"], correct:1,
+    exp:"FCS (Frame Check Sequence) es la cola de la trama, un checksum de verificación de errores de capa 2."},
+  {q:"¿Qué campo de un ClientHello TLS viaja sin cifrar y revela el dominio al que te conectas?", opts:["Cipher Suite","ALPN","SNI (Server Name Indication)","MAC address"], correct:2,
+    exp:"El SNI va en texto plano dentro del ClientHello, antes de que arranque el cifrado — por eso un firewall puede filtrar por dominio sin descifrar nada."},
+  {q:"¿Qué dispositivo opera principalmente en la capa 2 (Enlace de Datos)?", opts:["Router","Switch","Firewall de capa 3","Servidor DNS"], correct:1,
+    exp:"El switch reenvía tramas según direcciones MAC, típico de capa 2. El router opera en capa 3."},
+];
+
+let quizAnswered = 0;
+let quizCorrect = 0;
+let quizData = STATIC_QUIZ_DATA;
+
+function setQuizSource(label, isAi){
+  const el = document.getElementById('quizSource');
+  el.textContent = label;
+  el.classList.toggle('ai', !!isAi);
+}
+
+async function loadQuizData(){
+  setQuizSource('Banco estático (10 preguntas) — cargando banco IA...', false);
+  try{
+    const res = await fetch('questions/osi-quiz.json', {cache:'no-store'});
+    if(!res.ok) throw new Error('sin JSON todavía');
+    const json = await res.json();
+    const valid = Array.isArray(json.questions) && json.questions.every(q =>
+      typeof q.q === 'string' && Array.isArray(q.opts) && q.opts.length === 4 &&
+      Number.isInteger(q.correct) && typeof q.exp === 'string'
+    );
+    if(!valid || json.questions.length === 0) throw new Error('JSON con formato inválido');
+
+    quizData = json.questions;
+    const date = new Date(json.generated_at);
+    const dateStr = isNaN(date) ? '' : ` · generado ${date.toLocaleDateString('es-ES')}`;
+    setQuizSource(`Banco IA (${quizData.length} preguntas, ${json.source || 'Groq'})${dateStr}`, true);
+    renderQuiz();
+  }catch(e){
+    // No pasa nada: nos quedamos con el banco estático que ya está renderizado.
+    quizData = STATIC_QUIZ_DATA;
+    setQuizSource('Banco estático (10 preguntas) — banco IA no disponible todavía', false);
+  }
+}
+
+function updateQuizScore(){
+  document.getElementById('quizScore').textContent = `${quizCorrect} / ${quizAnswered} correctas · ${quizAnswered}/${quizData.length} respondidas`;
+}
+
+function renderQuiz(){
+  quizAnswered = 0; quizCorrect = 0;
+  const list = document.getElementById('quizList');
+  list.innerHTML = quizData.map((item, qi) => `
+    <div class="quiz-item" data-qi="${qi}">
+      <div class="quiz-q"><span class="qn">P${qi+1}.</span>${item.q}</div>
+      <div class="quiz-opts">
+        ${item.opts.map((opt, oi) => `<button class="quiz-opt" data-oi="${oi}">${opt}</button>`).join('')}
+      </div>
+      <div class="quiz-explain">${item.exp}</div>
+    </div>
+  `).join('');
+  updateQuizScore();
+
+  list.querySelectorAll('.quiz-item').forEach(itemEl => {
+    const qi = parseInt(itemEl.dataset.qi, 10);
+    itemEl.querySelectorAll('.quiz-opt').forEach(optBtn => {
+      optBtn.addEventListener('click', () => {
+        if(itemEl.classList.contains('answered')) return;
+        const oi = parseInt(optBtn.dataset.oi, 10);
+        const correctIdx = quizData[qi].correct;
+        itemEl.classList.add('answered');
+        itemEl.querySelectorAll('.quiz-opt').forEach((b, bi) => {
+          if(bi === correctIdx) b.classList.add('correct');
+          else if(bi === oi) b.classList.add('wrong');
+        });
+        quizAnswered++;
+        if(oi === correctIdx) quizCorrect++;
+        updateQuizScore();
+      });
+    });
+  });
+}
+renderQuiz();
+loadQuizData();
+document.getElementById('quizReset').addEventListener('click', renderQuiz);
+
+/* ============ GLOBAL SEARCH ============ */
+const globalSearch = document.getElementById('globalSearch');
+const searchResults = document.getElementById('searchResults');
+globalSearch.addEventListener('keydown', e => {
+  if(e.key !== 'Enter') return;
+  const q = globalSearch.value.trim().toLowerCase();
+  if(!q){ searchResults.textContent = ''; return; }
+
+  // 1. coincidencia por puerto
+  const portMatch = ports.find(p => String(p.port) === q);
+  if(portMatch){
+    searchResults.innerHTML = `<b>${q}</b> → ${portMatch.service} (${portMatch.proto}) — Capa 4 Transporte`;
+    document.querySelector('[data-view="ports"]').click();
+    document.getElementById('portSearch').value = q;
+    renderPorts(q);
+    return;
+  }
+
+  // 2. coincidencia por keyword de capa
+  const layerMatch = layers.find(l => l.keywords.some(k => k.includes(q) || q.includes(k)));
+  if(layerMatch){
+    searchResults.innerHTML = `<b>${q}</b> → Capa ${layerMatch.num} (${layerMatch.name})`;
+    openLayer(layerMatch.num, true);
+    return;
+  }
+
+  // 3. coincidencia por síntoma de troubleshooting
+  const troubleMatch = troubleshooting.find(t => t.text.toLowerCase().includes(q));
+  if(troubleMatch){
+    searchResults.innerHTML = `<b>${q}</b> → síntoma relacionado con Capa ${troubleMatch.layer}`;
+    openLayer(troubleMatch.layer, true);
+    return;
+  }
+
+  searchResults.innerHTML = `Sin resultados directos para <b>${q}</b>. Prueba con un protocolo, puerto o dispositivo.`;
+});
+</script>
+
+</body>
+</html>
