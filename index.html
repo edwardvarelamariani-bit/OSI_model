@@ -243,11 +243,82 @@ header .sub{
   max-width:100%; overflow:hidden; white-space:nowrap; text-shadow:0 0 8px rgba(57,255,20,0.6);
 }
 
+/* tira de bytes que crece con cada capa (vista principal de encapsulación) */
+.byte-strip-wrap{width:100%; display:flex; flex-direction:column; align-items:center; gap:10px;}
+.byte-strip{
+  display:flex; align-items:stretch; gap:3px; flex-wrap:wrap; justify-content:center;
+  min-height:56px; width:100%; max-width:640px;
+}
+.byte-block{
+  position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  min-width:46px; height:52px; border-radius:5px; font-family:'Orbitron', sans-serif;
+  font-size:10.5px; font-weight:700; letter-spacing:0.5px; cursor:help;
+  animation:popIn .3s ease both; border:1px solid transparent;
+}
+.byte-block .bb-size{font-family:'JetBrains Mono', monospace; font-size:8.5px; font-weight:400; opacity:0.75; margin-top:2px;}
+.byte-block.core{background:var(--panel2); border-color:var(--text-dim); color:var(--text);}
+.byte-block.l7{background:rgba(0,255,242,0.14); border-color:var(--cyan); color:var(--cyan);}
+.byte-block.l4{background:rgba(176,107,255,0.16); border-color:var(--purple); color:var(--purple);}
+.byte-block.l3{background:rgba(255,176,0,0.16); border-color:var(--amber); color:var(--amber);}
+.byte-block.l2{background:rgba(57,255,20,0.16); border-color:var(--green); color:var(--green);}
+.byte-block::after{
+  content: attr(data-tip);
+  position:absolute; bottom:115%; left:50%; transform:translateX(-50%);
+  background:var(--panel2); border:1px solid var(--border); color:var(--text);
+  padding:7px 10px; border-radius:6px; font-family:'JetBrains Mono', monospace;
+  font-size:10.5px; font-weight:400; letter-spacing:0.2px; white-space:normal; width:190px;
+  line-height:1.5; opacity:0; pointer-events:none; transition:opacity .15s; z-index:30;
+  box-shadow:0 6px 18px rgba(0,0,0,0.5);
+}
+.byte-block:hover::after{opacity:1;}
+.byte-block:hover{transform:translateY(-2px);}
+.byte-strip-total{
+  font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--text-dim); letter-spacing:1px;
+}
+.byte-strip-total b{color:var(--green);}
+.byte-strip-bits{
+  font-family:'JetBrains Mono', monospace; font-size:12px; letter-spacing:2px; color:var(--green);
+  background:var(--panel); border:2px solid var(--green); border-radius:10px; padding:16px 20px;
+  max-width:100%; overflow:hidden; white-space:nowrap; text-shadow:0 0 8px rgba(57,255,20,0.6);
+  animation:popIn .3s ease both;
+}
+
 .encap-label{font-family:'Orbitron', sans-serif; font-size:13px; letter-spacing:2px; color:var(--text); text-transform:uppercase; text-align:center;}
 .encap-sub{font-size:11.5px; color:var(--text-dim); text-align:center; max-width:520px; line-height:1.65;}
 .encap-progress{display:flex; gap:6px; margin-top:2px;}
 .encap-progress .dot{width:8px; height:8px; border-radius:50%; background:var(--border); transition:background .2s;}
 .encap-progress .dot.done{background:var(--cyan);}
+
+/* historial de pasos ya simulados */
+.encap-trail-wrap{
+  margin-top:24px; padding-top:18px; border-top:1px dashed var(--border);
+}
+.encap-trail-title{
+  font-size:10px; color:var(--text-dim); letter-spacing:1px; text-transform:uppercase;
+  text-align:center; margin-bottom:14px;
+}
+.encap-trail{
+  display:flex; align-items:center; gap:8px; overflow-x:auto; padding:6px 4px 12px;
+  justify-content:flex-start;
+}
+.trail-step{
+  display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer;
+  opacity:0.4; transition:all .25s; flex-shrink:0; padding:6px 8px; border-radius:6px;
+  border:1px solid transparent;
+}
+.trail-step:hover{opacity:0.7; background:var(--panel);}
+.trail-step.current{opacity:1; border-color:var(--green); background:rgba(57,255,20,0.06); box-shadow:0 0 10px rgba(57,255,20,0.2);}
+.trail-step .ts-badges{display:flex; gap:2px; min-height:14px; align-items:center;}
+.trail-step .ts-badge{width:13px; height:13px; border-radius:3px;}
+.trail-step .ts-badge.core{background:var(--text-dim);}
+.trail-step .ts-badge.l7{background:var(--cyan);}
+.trail-step .ts-badge.l4{background:var(--purple);}
+.trail-step .ts-badge.l3{background:var(--amber);}
+.trail-step .ts-badge.l2{background:var(--green);}
+.trail-step .ts-badge.bits{width:34px; background:repeating-linear-gradient(90deg, var(--green) 0 3px, transparent 3px 6px);}
+.trail-step .ts-label{font-size:9px; color:var(--text-dim); letter-spacing:0.5px; white-space:nowrap; font-family:'Share Tech Mono', monospace;}
+.trail-step.current .ts-label{color:var(--green);}
+.trail-arrow{color:var(--border); font-size:12px; flex-shrink:0;}
 
 /* leyenda dinámica de siglas */
 .encap-legend{
@@ -459,10 +530,18 @@ footer{margin-top:32px; text-align:center; font-size:10.5px; color:var(--text-di
     <div class="encap-rail" id="encapRail"></div>
 
     <div class="encap-stage">
-      <div class="nest-wrap" id="nestWrap"></div>
+      <div class="byte-strip-wrap">
+        <div class="byte-strip" id="byteStrip"></div>
+        <div class="byte-strip-total" id="byteStripTotal"></div>
+      </div>
       <div class="encap-label" id="encapLabel">DATOS DE APLICACIÓN</div>
       <div class="encap-sub" id="encapSub">Pulsa "Simular envío" para ver cómo cada capa envuelve los datos con su propia cabecera, hasta convertirlos en bits.</div>
       <div class="encap-progress" id="encapProgress"></div>
+    </div>
+
+    <div class="encap-trail-wrap">
+      <div class="encap-trail-title">// Historial de este envío — click en cualquier paso para volver a él</div>
+      <div class="encap-trail" id="encapTrail"></div>
     </div>
 
     <div class="encap-legend" id="encapLegend"></div>
@@ -772,7 +851,6 @@ const encapSteps = [
 ];
 
 let encapStep = 0;
-const nestWrap = document.getElementById('nestWrap');
 const encapLabel = document.getElementById('encapLabel');
 const encapSub = document.getElementById('encapSub');
 const encapDir = document.getElementById('encapDir');
@@ -792,6 +870,52 @@ function buildNest(stack){
     html = `<div class="nest-box ${layer.cls}"><span class="nest-tab head">${layer.key}</span>${html}${tailTab}</div>`;
   }
   return html;
+}
+
+// Tamaños de ejemplo (bytes) y explicación de cada trozo — mismos colores que el resto de la app.
+const BYTE_META = {
+  DATOS: {bytes:20, cls:'core', tip:'Datos de aplicación: el contenido real que quieres enviar. (20 bytes de ejemplo)'},
+  HTTP:  {bytes:40, cls:'l7',   tip:'Cabecera de aplicación (HTTP): método, ruta, headers. (~40 bytes de ejemplo)'},
+  TCP:   {bytes:20, cls:'l4',   tip:'Cabecera TCP: puertos origen/destino, flags, nº de secuencia. (20 bytes base)'},
+  IP:    {bytes:20, cls:'l3',   tip:'Cabecera IP: dirección origen/destino, TTL. (20 bytes)'},
+  MAC:   {bytes:14, cls:'l2',   tip:'Cabecera Ethernet: MAC origen/destino, EtherType. (14 bytes)'},
+  FCS:   {bytes:4,  cls:'l2',   tip:'Cola de la trama: checksum para detectar errores de transmisión. (4 bytes)'},
+};
+const BYTE_PX_PER_BYTE = 4.5; // escala visual — no representa una proporcion exacta, solo la tendencia de crecimiento
+
+function getByteSegmentKeys(step){
+  // step.stack va de dentro (DATOS) hacia afuera; en el cable el orden es al revés
+  // (cabecera más externa primero), y la cola (si hay) va la última de todas.
+  const order = [...step.stack].reverse();
+  const keys = order.map(e => e.key);
+  const trailerEntry = order.find(e => e.trailer);
+  if(trailerEntry) keys.push(trailerEntry.trailer);
+  return keys;
+}
+
+function renderByteStrip(step){
+  const stripEl = document.getElementById('byteStrip');
+  const totalEl = document.getElementById('byteStripTotal');
+
+  if(step.bits){
+    // Usamos el tamaño total de la trama completa (último paso con stack) para el mensaje de bits.
+    const framStep = encapSteps.find(s => s.layerNum === 2 && s.stack);
+    const totalBytes = getByteSegmentKeys(framStep).reduce((sum,k)=> sum + BYTE_META[k].bytes, 0);
+    stripEl.innerHTML = `<div class="byte-strip-bits">${totalBytes} bytes → señal (voltaje / luz / radio)</div>`;
+    totalEl.innerHTML = `<b>${totalBytes} bytes</b> convertidos en bits para transmitir`;
+    return;
+  }
+
+  const keys = getByteSegmentKeys(step);
+  stripEl.innerHTML = keys.map((k, i) => {
+    const m = BYTE_META[k];
+    return `<div class="byte-block ${m.cls}" style="width:${Math.max(46, m.bytes*BYTE_PX_PER_BYTE)}px; animation-delay:${i*70}ms" data-tip="${m.tip}">
+      <span>${k}</span><span class="bb-size">${m.bytes}B</span>
+    </div>`;
+  }).join('');
+
+  const total = keys.reduce((sum,k)=> sum + BYTE_META[k].bytes, 0);
+  totalEl.innerHTML = `<b>${total} bytes</b> totales en este paso`;
 }
 
 function renderRail(step){
@@ -825,22 +949,48 @@ function renderLegend(step){
   }).join('');
 }
 
+let encapMaxReached = 0; // el punto más lejano al que hemos llegado en este envío, para no perder el historial al ir hacia atrás
+
+function renderTrail(){
+  const trailEl = document.getElementById('encapTrail');
+  let html = '';
+  for(let i = 0; i <= encapMaxReached; i++){
+    const s = encapSteps[i];
+    const badgesHtml = s.bits
+      ? `<div class="ts-badge bits"></div>`
+      : s.stack.map(x => `<div class="ts-badge ${x.cls}"></div>`).join('');
+    const label = s.bits ? 'Bits' : (i === 0 ? 'Datos' : `Capa ${s.layerNum}`);
+    html += `<div class="trail-step ${i === encapStep ? 'current' : ''}" data-step="${i}">
+      <div class="ts-badges">${badgesHtml}</div>
+      <div class="ts-label">${label}</div>
+    </div>`;
+    if(i < encapMaxReached) html += `<div class="trail-arrow">→</div>`;
+  }
+  trailEl.innerHTML = html;
+  trailEl.querySelectorAll('.trail-step').forEach(el => {
+    el.addEventListener('click', () => {
+      encapStep = parseInt(el.dataset.step, 10);
+      renderEncap();
+    });
+  });
+}
+
 function renderEncap(){
   const s = encapSteps[encapStep];
-  nestWrap.innerHTML = s.bits
-    ? `<div class="nest-bits" id="bitsStream">01001000 01010100 01010100 01010000...</div>`
-    : buildNest(s.stack);
+  renderByteStrip(s);
   encapLabel.textContent = s.label;
   encapSub.textContent = s.sub;
   encapProgress.innerHTML = encapSteps.map((_,i)=>`<div class="dot ${i<=encapStep?'done':''}"></div>`).join('');
   renderRail(s);
   renderLegend(s);
+  renderTrail();
   btnDown.disabled = encapStep >= encapSteps.length - 1;
   btnUp.disabled = encapStep <= 0;
 }
 btnDown.addEventListener('click', ()=>{
   encapDir.textContent = 'ENVIANDO ▼ ENCAPSULANDO (emisor)';
   if(encapStep < encapSteps.length - 1) encapStep++;
+  if(encapStep > encapMaxReached) encapMaxReached = encapStep;
   renderEncap();
 });
 btnUp.addEventListener('click', ()=>{
@@ -849,7 +999,7 @@ btnUp.addEventListener('click', ()=>{
   renderEncap();
 });
 btnReset.addEventListener('click', ()=>{
-  encapStep = 0; encapDir.textContent = 'LISTO PARA SIMULAR'; renderEncap();
+  encapStep = 0; encapMaxReached = 0; encapDir.textContent = 'LISTO PARA SIMULAR'; renderEncap();
 });
 renderEncap();
 
