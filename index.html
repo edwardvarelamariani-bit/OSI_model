@@ -276,6 +276,7 @@ header .sub{
   font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--text-dim); letter-spacing:1px;
 }
 .byte-strip-total b{color:var(--green);}
+.encap-hexdump-wrap{width:100%; max-width:640px; margin:26px auto 0;}
 .byte-strip-bits{
   font-family:'JetBrains Mono', monospace; font-size:12px; letter-spacing:2px; color:var(--green);
   background:var(--panel); border:2px solid var(--green); border-radius:10px; padding:16px 20px;
@@ -537,6 +538,11 @@ footer{margin-top:32px; text-align:center; font-size:10.5px; color:var(--text-di
       <div class="encap-label" id="encapLabel">DATOS DE APLICACIÓN</div>
       <div class="encap-sub" id="encapSub">Pulsa "Simular envío" para ver cómo cada capa envuelve los datos con su propia cabecera, hasta convertirlos en bits.</div>
       <div class="encap-progress" id="encapProgress"></div>
+    </div>
+
+    <div class="encap-hexdump-wrap">
+      <div class="encap-trail-title">// Bytes de este paso (ejemplo ilustrativo — no es una captura real, para eso ve a "Captura real")</div>
+      <div class="hexdump-table-wrap" id="encapHexTable"></div>
     </div>
 
     <div class="encap-trail-wrap">
@@ -918,6 +924,60 @@ function renderByteStrip(step){
   totalEl.innerHTML = `<b>${total} bytes</b> totales en este paso`;
 }
 
+// Bytes de ejemplo (ilustrativos, no reales) por segmento — se recortan/rellenan
+// automáticamente para cuadrar exactamente con el tamaño declarado en BYTE_META.
+function hexBytesFromExample(exampleHexArray, targetLen){
+  const arr = exampleHexArray.slice(0, targetLen);
+  while(arr.length < targetLen) arr.push('00');
+  return arr;
+}
+function asciiToHexBytes(str, targetLen){
+  const bytes = [];
+  for(let i = 0; i < str.length && bytes.length < targetLen; i++){
+    bytes.push(str.charCodeAt(i).toString(16).padStart(2,'0'));
+  }
+  while(bytes.length < targetLen) bytes.push('20'); // relleno con espacios
+  return bytes.slice(0, targetLen);
+}
+
+const HEX_EXAMPLES = {
+  MAC:   hexBytesFromExample(['aa','bb','cc','dd','ee','ff','11','22','33','44','55','66','08','00'], BYTE_META.MAC.bytes),
+  IP:    hexBytesFromExample(['45','00','00','4e','12','34','40','00','40','06','ab','cd','c0','a8','01','0a','5d','b8','d0','dd'], BYTE_META.IP.bytes),
+  TCP:   hexBytesFromExample(['1f','90','01','bb','00','00','00','01','00','00','00','00','50','18','20','00','ab','cd','00','00'], BYTE_META.TCP.bytes),
+  HTTP:  asciiToHexBytes('GET /api/data HTTP/1.1\r\nHost: osi.lab\r\n', BYTE_META.HTTP.bytes),
+  DATOS: asciiToHexBytes('{"usuario":"eddie","ok":true}', BYTE_META.DATOS.bytes),
+  FCS:   hexBytesFromExample(['9a','3f','c2','01'], BYTE_META.FCS.bytes),
+};
+
+function renderEncapHex(step){
+  const wrap = document.getElementById('encapHexTable');
+
+  if(step.bits){
+    wrap.innerHTML = `<div class="hexdump-truncnote">Ya no hay bytes con estructura visible — todo viaja como una señal física continua.</div>`;
+    return;
+  }
+
+  const keys = getByteSegmentKeys(step);
+  let flat = [];
+  keys.forEach(k => {
+    const cls = BYTE_META[k].cls;
+    HEX_EXAMPLES[k].forEach(h => flat.push({hex: h, cls}));
+  });
+
+  let rowsHtml = '';
+  for(let i = 0; i < flat.length; i += 16){
+    const rowBytes = flat.slice(i, i + 16);
+    const offsetStr = '0x' + i.toString(16).padStart(4, '0');
+    const hexCells = rowBytes.map(b => `<span class="hx-byte ${b.cls}">${b.hex}</span>`).join('');
+    const asciiCells = rowBytes.map(b => {
+      const ch = byteToAscii(b.hex);
+      return ch !== '.' ? `<span class="hi">${ch}</span>` : '.';
+    }).join('');
+    rowsHtml += `<tr><td class="hx-offset">${offsetStr}:</td><td>${hexCells}</td><td class="hx-ascii">${asciiCells}</td></tr>`;
+  }
+  wrap.innerHTML = `<table class="hexdump-table">${rowsHtml}</table>`;
+}
+
 function renderRail(step){
   const stackCls = step.stack ? step.stack.map(x=>x.cls) : [];
   const done = new Set();
@@ -978,6 +1038,7 @@ function renderTrail(){
 function renderEncap(){
   const s = encapSteps[encapStep];
   renderByteStrip(s);
+  renderEncapHex(s);
   encapLabel.textContent = s.label;
   encapSub.textContent = s.sub;
   encapProgress.innerHTML = encapSteps.map((_,i)=>`<div class="dot ${i<=encapStep?'done':''}"></div>`).join('');
