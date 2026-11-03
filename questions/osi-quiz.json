@@ -1,171 +1,171 @@
 {
-  "generated_at": "2026-11-02T15:14:58.442Z",
+  "generated_at": "2026-11-03T13:53:53.441Z",
   "source": "groq/openai/gpt-oss-120b",
   "questions": [
     {
-      "q": "¿Qué capa del modelo OSI se encarga del encaminamiento (routing) de paquetes?",
+      "q": "¿Cuál es la principal función de la capa de sesión en el modelo OSI?",
       "opts": [
-        "Capa Física",
-        "Capa de Enlace de datos",
-        "Capa de Red",
-        "Capa de Transporte"
-      ],
-      "correct": 2,
-      "exp": "El encaminamiento se realiza en la Capa de Red (capa 3)."
-    },
-    {
-      "q": "¿Cómo se denomina la unidad de datos (PDU) en la capa de Transporte del modelo OSI?",
-      "opts": [
-        "Trama",
-        "Paquete",
-        "Segmento",
-        "Bit"
-      ],
-      "correct": 2,
-      "exp": "En la capa de Transporte, la PDU se llama segmento (o datagrama para UDP)."
-    },
-    {
-      "q": "¿Qué capa del modelo OSI se corresponde principalmente con la capa Internet del modelo TCP/IP?",
-      "opts": [
-        "Capa de Transporte",
-        "Capa de Red",
-        "Capa de Aplicación",
-        "Capa de Enlace de datos"
-      ],
-      "correct": 1,
-      "exp": "La capa Internet del modelo TCP/IP equivale a la Capa de Red del modelo OSI."
-    },
-    {
-      "q": "¿Cuál de los siguientes protocolos utiliza el puerto 53?",
-      "opts": [
-        "HTTP",
-        "FTP",
-        "DNS",
-        "SMTP"
-      ],
-      "correct": 2,
-      "exp": "El puerto 53 está asignado al protocolo DNS."
-    },
-    {
-      "q": "¿Cuál de los siguientes dispositivos opera principalmente en la capa de Enlace de datos?",
-      "opts": [
-        "Switch",
-        "Router",
-        "Firewall",
-        "Repetidor"
+        "Establecer y mantener conexiones lógicas entre aplicaciones",
+        "Ruteo de paquetes",
+        "Conversión de direcciones IP",
+        "Detección de errores de bits"
       ],
       "correct": 0,
-      "exp": "Los switches toman decisiones basadas en direcciones MAC, función típica de la capa de Enlace."
+      "exp": "La capa de sesión gestiona el control de diálogos y sincroniza la comunicación entre aplicaciones."
     },
     {
-      "q": "Durante la encapsulación en el modelo TCP/IP, ¿qué encabezado se añade primero (más cercano a los datos)?",
+      "q": "¿Qué PDU se genera en la capa de transporte?",
       "opts": [
-        "Encabezado de Aplicación",
-        "Encabezado de Transporte",
-        "Encabezado de Internet",
-        "Encabezado de Enlace"
-      ],
-      "correct": 1,
-      "exp": "Primero se añade el encabezado de la capa de Transporte (TCP o UDP)."
-    },
-    {
-      "q": "¿Cuál es la unidad de datos (PDU) utilizada en la capa Física?",
-      "opts": [
-        "Trama",
+        "Segmento",
         "Paquete",
-        "Bit",
-        "Segmento"
+        "Trama",
+        "Bits"
+      ],
+      "correct": 0,
+      "exp": "En la capa de transporte los datos se encapsulan como segmentos (TCP) o datagramas (UDP)."
+    },
+    {
+      "q": "¿Cuál de los siguientes protocolos opera en la capa de aplicación del modelo OSI?",
+      "opts": [
+        "TCP",
+        "IP",
+        "HTTP",
+        "Ethernet"
       ],
       "correct": 2,
-      "exp": "En la capa Física la información se transmite como bits (señales)."
+      "exp": "HTTP es un protocolo de la capa de aplicación, mientras que TCP e IP pertenecen a capas inferiores."
     },
     {
-      "q": "¿Qué protocolo proporciona un servicio fiable y orientado a conexión?",
-      "opts": [
-        "UDP",
-        "TCP",
-        "ICMP",
-        "IP"
-      ],
-      "correct": 1,
-      "exp": "TCP garantiza entrega fiable y establece una conexión antes de transferir datos."
-    },
-    {
-      "q": "¿Cuál es el tamaño máximo de un paquete IPv4 (incluyendo encabezado) en bytes?",
-      "opts": [
-        "1500",
-        "65535",
-        "4096",
-        "8192"
-      ],
-      "correct": 1,
-      "exp": "El campo total length de IPv4 permite hasta 65535 bytes."
-    },
-    {
-      "q": "¿Qué puerto se utiliza habitualmente para HTTPS?",
+      "q": "¿Qué puerto TCP está asignado por defecto al servicio HTTPS?",
       "opts": [
         "80",
-        "21",
         "443",
+        "21",
         "25"
       ],
-      "correct": 2,
-      "exp": "HTTPS opera sobre el puerto 443."
-    },
-    {
-      "q": "¿En qué capa del modelo OSI se manejan típicamente funciones de cifrado y compresión?",
-      "opts": [
-        "Sesión",
-        "Presentación",
-        "Aplicación",
-        "Transporte"
-      ],
       "correct": 1,
-      "exp": "La capa de Presentación (capa 6) se encarga de la representación, cifrado y compresión."
+      "exp": "El puerto 443 es el puerto estándar para HTTPS."
     },
     {
-      "q": "¿Cuál de las siguientes afirmaciones sobre UDP es FALSA?",
+      "q": "En la capa de enlace de datos, ¿qué dispositivo se encarga de aprender y almacenar direcciones MAC?",
       "opts": [
-        "No establece conexión previa",
-        "Garantiza el orden de los paquetes",
-        "Tiene menor sobrecarga que TCP",
-        "Se usa en consultas DNS"
-      ],
-      "correct": 1,
-      "exp": "UDP no garantiza el orden; esa es la afirmación falsa."
-    },
-    {
-      "q": "¿Qué dispositivo regenera la señal para extender la distancia de transmisión?",
-      "opts": [
-        "Switch",
-        "Hub",
         "Router",
-        "Repetidor"
-      ],
-      "correct": 3,
-      "exp": "El repetidor amplifica y regenera la señal eléctrica/óptica."
-    },
-    {
-      "q": "¿Qué protocolo opera en la capa de Red y proporciona direccionamiento lógico?",
-      "opts": [
-        "ARP",
-        "ICMP",
-        "IP",
-        "TCP"
+        "Repeater",
+        "Switch",
+        "Firewall"
       ],
       "correct": 2,
-      "exp": "IP es el protocolo de la capa de Red que asigna direcciones lógicas."
+      "exp": "Los switches construyen tablas de direcciones MAC para reenviar tramas dentro de la LAN."
     },
     {
-      "q": "En el proceso de establecimiento de conexión TCP (three-way handshake), ¿qué bandera se establece en el segundo segmento?",
+      "q": "Durante la encapsulación, ¿qué información se añade al paquete en la capa de red?",
       "opts": [
-        "SYN",
-        "ACK",
-        "FIN",
-        "SYN‑ACK"
+        "Dirección IP de origen y destino",
+        "Dirección MAC de origen y destino",
+        "Número de puerto",
+        "Checksum"
+      ],
+      "correct": 0,
+      "exp": "La capa de red agrega las direcciones IP de origen y destino al datagrama."
+    },
+    {
+      "q": "Una ventaja principal de UDP frente a TCP es:",
+      "opts": [
+        "Control de flujo",
+        "Reordenamiento de paquetes",
+        "Garantía de entrega",
+        "Menor sobrecarga de control"
       ],
       "correct": 3,
-      "exp": "El segundo segmento lleva la bandera SYN‑ACK para confirmar el SYN recibido."
+      "exp": "UDP carece de mecanismos de control, lo que reduce la sobrecarga y aumenta la velocidad."
+    },
+    {
+      "q": "En el modelo TCP/IP, la capa de Internet corresponde a cuál capa del modelo OSI?",
+      "opts": [
+        "Capa de enlace",
+        "Capa de transporte",
+        "Capa de red",
+        "Capa de aplicación"
+      ],
+      "correct": 2,
+      "exp": "La capa de Internet (IP) equivale a la capa de red del modelo OSI."
+    },
+    {
+      "q": "¿Cuántos bits tiene una dirección IPv6?",
+      "opts": [
+        "32",
+        "128",
+        "64",
+        "256"
+      ],
+      "correct": 1,
+      "exp": "IPv6 utiliza direcciones de 128 bits."
+    },
+    {
+      "q": "¿Cuál es la función principal del protocolo ARP?",
+      "opts": [
+        "Controlar el flujo de datos",
+        "Asignar direcciones IP dinámicamente",
+        "Encriptar paquetes",
+        "Resolver direcciones IP a direcciones MAC"
+      ],
+      "correct": 3,
+      "exp": "ARP traduce una dirección IP a su correspondiente dirección MAC en la LAN."
+    },
+    {
+      "q": "En NAT, ¿qué tipo de traducción permite que varios hosts internos compartan una única dirección IP pública?",
+      "opts": [
+        "PAT (Port Address Translation)",
+        "Static NAT",
+        "Dynamic NAT",
+        "Proxy NAT"
+      ],
+      "correct": 0,
+      "exp": "PAT asigna diferentes puertos a cada sesión, permitiendo compartir una única IP pública."
+    },
+    {
+      "q": "En el proceso de establecimiento de conexión TCP (three‑way handshake), ¿cuál es el tercer paso?",
+      "opts": [
+        "El cliente envía SYN",
+        "El servidor envía SYN‑ACK",
+        "El cliente envía ACK",
+        "El servidor envía ACK"
+      ],
+      "correct": 2,
+      "exp": "Después del SYN del cliente y el SYN‑ACK del servidor, el cliente envía un ACK final."
+    },
+    {
+      "q": "En UDP, el campo de checksum es:",
+      "opts": [
+        "Obligatorio y siempre calculado",
+        "Opcional, puede ser cero",
+        "Usado para cifrado",
+        "Reemplazado por TCP"
+      ],
+      "correct": 1,
+      "exp": "El checksum de UDP es opcional; si no se calcula, se coloca cero."
+    },
+    {
+      "q": "El mensaje ICMP tipo 3 corresponde a:",
+      "opts": [
+        "Eco request",
+        "Tiempo excedido",
+        "Destino inalcanzable",
+        "Redireccionamiento"
+      ],
+      "correct": 2,
+      "exp": "ICMP tipo 3 indica que el destino del paquete es inalcanzable."
+    },
+    {
+      "q": "¿Por qué las consultas DNS se realizan habitualmente sobre UDP y no sobre TCP?",
+      "opts": [
+        "Menor latencia y sobrecarga",
+        "Mayor fiabilidad",
+        "Soporte de cifrado",
+        "Permite transmisión de datos mayores a 512 bytes"
+      ],
+      "correct": 0,
+      "exp": "UDP es más rápido y con menos sobrecarga, adecuado para consultas DNS típicas."
     }
   ]
 }
