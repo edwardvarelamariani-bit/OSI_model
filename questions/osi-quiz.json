@@ -1,171 +1,171 @@
 {
-  "generated_at": "2026-11-03T13:53:53.441Z",
+  "generated_at": "2026-11-04T14:03:43.344Z",
   "source": "groq/openai/gpt-oss-120b",
   "questions": [
     {
-      "q": "¿Cuál es la principal función de la capa de sesión en el modelo OSI?",
+      "q": "¿Cuál es la función principal de la capa de sesión del modelo OSI?",
       "opts": [
-        "Establecer y mantener conexiones lógicas entre aplicaciones",
-        "Ruteo de paquetes",
-        "Conversión de direcciones IP",
-        "Detección de errores de bits"
+        "Establecer, mantener y terminar sesiones lógicas entre aplicaciones",
+        "Enrutamiento de paquetes entre redes",
+        "Transmisión de bits por el medio físico",
+        "Compresión y cifrado de datos"
       ],
       "correct": 0,
-      "exp": "La capa de sesión gestiona el control de diálogos y sincroniza la comunicación entre aplicaciones."
+      "exp": "La capa de sesión controla el diálogo entre aplicaciones, gestionando el inicio, mantenimiento y cierre de sesiones."
     },
     {
-      "q": "¿Qué PDU se genera en la capa de transporte?",
+      "q": "¿Qué unidad de datos (PDU) se llama en la capa de red del modelo OSI?",
       "opts": [
-        "Segmento",
-        "Paquete",
         "Trama",
+        "Paquete",
+        "Segmento",
         "Bits"
       ],
-      "correct": 0,
-      "exp": "En la capa de transporte los datos se encapsulan como segmentos (TCP) o datagramas (UDP)."
+      "correct": 1,
+      "exp": "En la capa de red la PDU se denomina paquete, que contiene direcciones IP."
     },
     {
-      "q": "¿Cuál de los siguientes protocolos opera en la capa de aplicación del modelo OSI?",
+      "q": "¿Cuál de los siguientes protocolos opera en la capa de transporte del modelo TCP/IP?",
       "opts": [
-        "TCP",
-        "IP",
         "HTTP",
-        "Ethernet"
+        "IP",
+        "TCP",
+        "ARP"
       ],
       "correct": 2,
-      "exp": "HTTP es un protocolo de la capa de aplicación, mientras que TCP e IP pertenecen a capas inferiores."
+      "exp": "TCP es un protocolo de la capa de transporte que ofrece conexión fiable."
     },
     {
-      "q": "¿Qué puerto TCP está asignado por defecto al servicio HTTPS?",
+      "q": "El puerto TCP 22 se utiliza típicamente para:",
       "opts": [
-        "80",
-        "443",
-        "21",
-        "25"
+        "Correo electrónico",
+        "Transferencia de archivos",
+        "Acceso remoto seguro (SSH)",
+        "Navegación web"
       ],
-      "correct": 1,
-      "exp": "El puerto 443 es el puerto estándar para HTTPS."
+      "correct": 2,
+      "exp": "El puerto 22 está reservado para SSH, que permite acceso remoto cifrado."
     },
     {
-      "q": "En la capa de enlace de datos, ¿qué dispositivo se encarga de aprender y almacenar direcciones MAC?",
+      "q": "¿Qué dispositivo opera principalmente en la capa de enlace de datos?",
       "opts": [
         "Router",
-        "Repeater",
-        "Switch",
-        "Firewall"
+        "Switch de capa 2",
+        "Firewall",
+        "Servidor DNS"
+      ],
+      "correct": 1,
+      "exp": "Un switch de capa 2 funciona en la capa de enlace, usando direcciones MAC para reenviar tramas."
+    },
+    {
+      "q": "Durante la encapsulación, ¿qué información se agrega en la capa de red?",
+      "opts": [
+        "Dirección MAC de origen y destino",
+        "Número de puerto de origen y destino",
+        "Dirección IP de origen y destino",
+        "Checksum de capa física"
       ],
       "correct": 2,
-      "exp": "Los switches construyen tablas de direcciones MAC para reenviar tramas dentro de la LAN."
+      "exp": "La capa de red agrega las direcciones IP de origen y destino en el encabezado del paquete."
     },
     {
-      "q": "Durante la encapsulación, ¿qué información se añade al paquete en la capa de red?",
+      "q": "En comparación con UDP, TCP garantiza:",
       "opts": [
-        "Dirección IP de origen y destino",
-        "Dirección MAC de origen y destino",
-        "Número de puerto",
-        "Checksum"
+        "Mayor velocidad de entrega",
+        "Entrega sin conexión",
+        "Control de flujo y retransmisiones",
+        "Uso de menos ancho de banda"
       ],
-      "correct": 0,
-      "exp": "La capa de red agrega las direcciones IP de origen y destino al datagrama."
+      "correct": 2,
+      "exp": "TCP incluye control de flujo, confirmaciones y retransmisiones para asegurar la entrega."
     },
     {
-      "q": "Una ventaja principal de UDP frente a TCP es:",
-      "opts": [
-        "Control de flujo",
-        "Reordenamiento de paquetes",
-        "Garantía de entrega",
-        "Menor sobrecarga de control"
-      ],
-      "correct": 3,
-      "exp": "UDP carece de mecanismos de control, lo que reduce la sobrecarga y aumenta la velocidad."
-    },
-    {
-      "q": "En el modelo TCP/IP, la capa de Internet corresponde a cuál capa del modelo OSI?",
+      "q": "¿Cuál es el equivalente de la capa de aplicación del modelo OSI en el modelo TCP/IP?",
       "opts": [
         "Capa de enlace",
         "Capa de transporte",
-        "Capa de red",
+        "Capa de internet",
         "Capa de aplicación"
       ],
-      "correct": 2,
-      "exp": "La capa de Internet (IP) equivale a la capa de red del modelo OSI."
-    },
-    {
-      "q": "¿Cuántos bits tiene una dirección IPv6?",
-      "opts": [
-        "32",
-        "128",
-        "64",
-        "256"
-      ],
-      "correct": 1,
-      "exp": "IPv6 utiliza direcciones de 128 bits."
-    },
-    {
-      "q": "¿Cuál es la función principal del protocolo ARP?",
-      "opts": [
-        "Controlar el flujo de datos",
-        "Asignar direcciones IP dinámicamente",
-        "Encriptar paquetes",
-        "Resolver direcciones IP a direcciones MAC"
-      ],
       "correct": 3,
-      "exp": "ARP traduce una dirección IP a su correspondiente dirección MAC en la LAN."
+      "exp": "En TCP/IP la capa de aplicación agrupa las funciones de las capas de aplicación, sesión y presentación de OSI."
     },
     {
-      "q": "En NAT, ¿qué tipo de traducción permite que varios hosts internos compartan una única dirección IP pública?",
+      "q": "¿En qué capa del modelo OSI se realiza la traducción de direcciones lógicas a direcciones físicas?",
       "opts": [
-        "PAT (Port Address Translation)",
-        "Static NAT",
-        "Dynamic NAT",
-        "Proxy NAT"
-      ],
-      "correct": 0,
-      "exp": "PAT asigna diferentes puertos a cada sesión, permitiendo compartir una única IP pública."
-    },
-    {
-      "q": "En el proceso de establecimiento de conexión TCP (three‑way handshake), ¿cuál es el tercer paso?",
-      "opts": [
-        "El cliente envía SYN",
-        "El servidor envía SYN‑ACK",
-        "El cliente envía ACK",
-        "El servidor envía ACK"
+        "Capa de red",
+        "Capa de sesión",
+        "Capa de enlace de datos",
+        "Capa de presentación"
       ],
       "correct": 2,
-      "exp": "Después del SYN del cliente y el SYN‑ACK del servidor, el cliente envía un ACK final."
+      "exp": "La capa de enlace de datos (capa 2) asocia direcciones IP (lógicas) con MAC (físicas) mediante protocolos como ARP."
     },
     {
-      "q": "En UDP, el campo de checksum es:",
+      "q": "¿Cuál de los siguientes protocolos es sin conexión y orientado a datagramas?",
       "opts": [
-        "Obligatorio y siempre calculado",
-        "Opcional, puede ser cero",
-        "Usado para cifrado",
-        "Reemplazado por TCP"
+        "TCP",
+        "UDP",
+        "FTP",
+        "TLS"
       ],
       "correct": 1,
-      "exp": "El checksum de UDP es opcional; si no se calcula, se coloca cero."
+      "exp": "UDP es un protocolo de transporte sin conexión que envía datagramas independientes."
     },
     {
-      "q": "El mensaje ICMP tipo 3 corresponde a:",
+      "q": "¿Qué capa del modelo OSI es responsable de la detección de errores mediante el checksum?",
       "opts": [
-        "Eco request",
-        "Tiempo excedido",
-        "Destino inalcanzable",
-        "Redireccionamiento"
+        "Capa física",
+        "Capa de enlace de datos",
+        "Capa de transporte",
+        "Capa de sesión"
       ],
       "correct": 2,
-      "exp": "ICMP tipo 3 indica que el destino del paquete es inalcanzable."
+      "exp": "TCP, en la capa de transporte, utiliza un checksum para detectar errores en los datos."
     },
     {
-      "q": "¿Por qué las consultas DNS se realizan habitualmente sobre UDP y no sobre TCP?",
+      "q": "El protocolo ARP funciona en cuál capa del modelo OSI?",
       "opts": [
-        "Menor latencia y sobrecarga",
-        "Mayor fiabilidad",
-        "Soporte de cifrado",
-        "Permite transmisión de datos mayores a 512 bytes"
+        "Capa de red",
+        "Capa de enlace de datos",
+        "Capa de presentación",
+        "Capa de aplicación"
+      ],
+      "correct": 1,
+      "exp": "ARP opera en la capa de enlace de datos para mapear direcciones IP a direcciones MAC."
+    },
+    {
+      "q": "¿Cuál es el número de puerto UDP estándar para el servicio DNS?",
+      "opts": [
+        "53",
+        "80",
+        "443",
+        "25"
       ],
       "correct": 0,
-      "exp": "UDP es más rápido y con menos sobrecarga, adecuado para consultas DNS típicas."
+      "exp": "El puerto 53 es el puerto asignado tanto a TCP como a UDP para consultas DNS."
+    },
+    {
+      "q": "En el modelo TCP/IP, la capa que corresponde a las capas de sesión y presentación del modelo OSI es:",
+      "opts": [
+        "Capa de aplicación",
+        "Capa de transporte",
+        "Capa de internet",
+        "Capa de enlace"
+      ],
+      "correct": 0,
+      "exp": "La capa de aplicación de TCP/IP engloba las funciones de sesión y presentación del modelo OSI."
+    },
+    {
+      "q": "¿Cuál de los siguientes dispositivos puede operar en la capa 3 del modelo OSI?",
+      "opts": [
+        "Hub",
+        "Switch de capa 2",
+        "Router",
+        "Repetidor"
+      ],
+      "correct": 2,
+      "exp": "Los routers trabajan en la capa 3, tomando decisiones basadas en direcciones IP."
     }
   ]
 }
