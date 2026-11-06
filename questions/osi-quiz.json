@@ -1,42 +1,42 @@
 {
-  "generated_at": "2026-11-05T14:23:55.550Z",
+  "generated_at": "2026-11-06T13:59:31.683Z",
   "source": "groq/openai/gpt-oss-120b",
   "questions": [
     {
-      "q": "¿En qué capa del modelo OSI se realiza el enrutamiento de paquetes?",
+      "q": "¿A qué capa del modelo TCP/IP corresponde la capa de Sesión del modelo OSI?",
       "opts": [
-        "Capa Física",
-        "Capa de Enlace de datos",
-        "Capa de Red",
-        "Capa de Transporte"
+        "Capa de Aplicación",
+        "Capa de Transporte",
+        "Capa de Internet",
+        "Capa de Acceso a la Red"
       ],
-      "correct": 2,
-      "exp": "El enrutamiento se lleva a cabo en la capa de Red (capa 3)."
+      "correct": 0,
+      "exp": "La capa de Sesión del OSI se implementa como parte de la Capa de Aplicación en TCP/IP."
     },
     {
-      "q": "¿Cuál es el nombre del PDU (Unidad de Datos de Protocolo) en la capa de Transporte?",
+      "q": "¿Cuál es la unidad de datos (PDU) que se maneja en la capa de Transporte del modelo OSI?",
       "opts": [
         "Segmento",
-        "Datagrama",
+        "Paquete",
         "Trama",
-        "Paquete"
+        "Bit"
       ],
       "correct": 0,
-      "exp": "En la capa de Transporte, los datos se encapsulan como segmentos (TCP) o datagramas (UDP)."
+      "exp": "En la capa de Transporte la PDU se llama segmento (TCP) o datagrama (UDP)."
     },
     {
-      "q": "¿Qué protocolo se asocia tradicionalmente a la capa de Sesión del modelo OSI?",
+      "q": "¿Qué protocolo pertenece a la capa de Red del modelo OSI?",
       "opts": [
-        "NetBIOS",
+        "TCP",
         "IP",
-        "ARP",
-        "UDP"
+        "Ethernet",
+        "FTP"
       ],
-      "correct": 0,
-      "exp": "NetBIOS provee servicios de sesión, como establecimiento y gestión de conexiones."
+      "correct": 1,
+      "exp": "IP (Internet Protocol) opera en la capa de Red (capa 3)."
     },
     {
-      "q": "¿Cuál es el puerto TCP estándar utilizado por HTTPS?",
+      "q": "¿Cuál es el número de puerto TCP estándar para el protocolo HTTPS?",
       "opts": [
         "80",
         "443",
@@ -44,128 +44,128 @@
         "25"
       ],
       "correct": 1,
-      "exp": "HTTPS opera sobre TCP puerto 443."
+      "exp": "HTTPS utiliza el puerto TCP 443 por defecto."
     },
     {
       "q": "¿Qué dispositivo opera principalmente en la capa de Enlace de datos?",
       "opts": [
-        "Switch",
         "Router",
-        "Hub",
-        "Repetidor"
-      ],
-      "correct": 0,
-      "exp": "Los switches utilizan direcciones MAC y funcionan en la capa de Enlace."
-    },
-    {
-      "q": "Durante la encapsulación, ¿qué PDU se agrega en la capa de Red?",
-      "opts": [
-        "Trama",
-        "Paquete",
-        "Segmento",
-        "Bit"
+        "Switch de capa 2",
+        "Firewall",
+        "Servidor DNS"
       ],
       "correct": 1,
-      "exp": "En la capa de Red se añade el paquete, que contiene direcciones IP."
+      "exp": "Un switch de capa 2 funciona en la capa de Enlace, conmutando tramas basadas en MAC."
     },
     {
-      "q": "¿Cuál de los siguientes protocolos garantiza la entrega fiable de los datos?",
+      "q": "Durante la encapsulación, ¿en qué orden se añaden las cabeceras al enviar datos desde la capa de Aplicación hasta la física?",
+      "opts": [
+        "Física → Enlace → Red → Transporte → Aplicación",
+        "Aplicación → Transporte → Red → Enlace → Física",
+        "Aplicación → Enlace → Transporte → Red → Física",
+        "Red → Transporte → Aplicación → Enlace → Física"
+      ],
+      "correct": 1,
+      "exp": "Los datos se encapsulan de arriba a abajo: Aplicación, Transporte, Red, Enlace, Física."
+    },
+    {
+      "q": "¿Cuál de los siguientes protocolos es sin conexión (connectionless)?",
+      "opts": [
+        "TCP",
+        "UDP",
+        "TLS",
+        "SCTP"
+      ],
+      "correct": 1,
+      "exp": "UDP es un protocolo de transporte sin conexión."
+    },
+    {
+      "q": "¿Qué protocolo garantiza la entrega fiable y con control de flujo?",
       "opts": [
         "UDP",
+        "ICMP",
         "TCP",
-        "Ambos",
-        "Ninguno"
-      ],
-      "correct": 1,
-      "exp": "TCP incluye mecanismos de control de errores y retransmisión, asegurando entrega fiable."
-    },
-    {
-      "q": "¿Qué capas del modelo OSI se agrupan en la capa de Acceso a la Red (Network Access) del modelo TCP/IP?",
-      "opts": [
-        "Capa Física y Capa de Enlace de datos",
-        "Capa de Red y Capa de Transporte",
-        "Capa de Sesión y Capa de Presentación",
-        "Capa de Aplicación y Capa de Presentación"
-      ],
-      "correct": 0,
-      "exp": "La capa de Acceso a la Red combina las capas Física y de Enlace del modelo OSI."
-    },
-    {
-      "q": "¿Qué protocolo utiliza el puerto UDP 53?",
-      "opts": [
-        "DNS",
-        "DHCP",
-        "SNMP",
-        "NTP"
-      ],
-      "correct": 0,
-      "exp": "El DNS emplea UDP (y a veces TCP) en el puerto 53 para consultas."
-    },
-    {
-      "q": "¿En qué capa del modelo OSI se encuentran típicamente las funciones de cifrado y compresión?",
-      "opts": [
-        "Capa de Presentación",
-        "Capa de Sesión",
-        "Capa de Aplicación",
-        "Capa de Transporte"
-      ],
-      "correct": 0,
-      "exp": "La capa de Presentación se encarga de la representación de datos, incluido cifrado y compresión."
-    },
-    {
-      "q": "¿Cuál de las siguientes NO es una característica de TCP?",
-      "opts": [
-        "Orientado a conexión",
-        "Control de flujo",
-        "Sin garantía de orden",
-        "Retransmisión de paquetes perdidos"
+        "ARP"
       ],
       "correct": 2,
-      "exp": "TCP garantiza el orden de los segmentos; la opción sin garantía de orden corresponde a UDP."
+      "exp": "TCP incluye mecanismos de retransmisión, ACK y control de flujo para entrega fiable."
     },
     {
-      "q": "En el proceso de establecimiento de conexión TCP (handshake de tres vías), ¿qué bandera(s) contiene el segundo segmento?",
+      "q": "¿En qué capa del modelo OSI se realiza el encaminamiento (routing) de paquetes?",
+      "opts": [
+        "Capa de Enlace",
+        "Capa de Red",
+        "Capa de Transporte",
+        "Capa de Sesión"
+      ],
+      "correct": 1,
+      "exp": "El routing se lleva a cabo en la Capa de Red (capa 3)."
+    },
+    {
+      "q": "¿Qué capa del modelo OSI utiliza direcciones MAC?",
+      "opts": [
+        "Capa Física",
+        "Capa de Enlace",
+        "Capa de Red",
+        "Capa de Transporte"
+      ],
+      "correct": 1,
+      "exp": "Las direcciones MAC son utilizadas por la Capa de Enlace de datos."
+    },
+    {
+      "q": "¿Cuál es la bandera (flag) TCP que indica el fin de una conexión?",
       "opts": [
         "SYN",
-        "SYN‑ACK",
+        "FIN",
         "ACK",
-        "FIN"
+        "RST"
       ],
       "correct": 1,
-      "exp": "El segundo mensaje lleva tanto la bandera SYN como la ACK, conocido como SYN‑ACK."
+      "exp": "El flag FIN se envía para cerrar una conexión TCP."
     },
     {
-      "q": "¿Qué dispositivo de red es capaz de realizar NAT (Traducción de Direcciones de Red)?",
+      "q": "En comparación con UDP, ¿qué característica garantiza TCP la entrega en orden?",
       "opts": [
-        "Switch",
-        "Router",
-        "Hub",
-        "Bridge"
+        "Checksum",
+        "Número de secuencia",
+        "Puerto de origen",
+        "Tamaño de ventana"
       ],
       "correct": 1,
-      "exp": "Los routers pueden traducir direcciones IP internas a externas mediante NAT."
+      "exp": "TCP usa números de secuencia para ordenar los segmentos al recibirlos."
     },
     {
-      "q": "¿En qué capa del modelo OSI opera el protocolo ARP?",
+      "q": "¿Qué protocolo de la capa de Aplicación resuelve nombres de dominio a direcciones IP?",
       "opts": [
-        "Capa de Red",
-        "Capa de Enlace de datos",
-        "Capa Física",
-        "Capa de Transporte"
+        "SMTP",
+        "DNS",
+        "HTTP",
+        "DHCP"
       ],
       "correct": 1,
-      "exp": "ARP funciona en la capa de Enlace para resolver direcciones MAC a partir de IP."
+      "exp": "El Sistema de Nombres de Dominio (DNS) traduce nombres a direcciones IP."
     },
     {
-      "q": "¿Cuál de los siguientes protocolos proporciona fiabilidad de extremo a extremo mediante números de secuencia?",
+      "q": "En el modelo TCP/IP, ¿a qué capa corresponde la capa de Enlace de datos del modelo OSI?",
       "opts": [
-        "UDP",
-        "IP",
-        "TCP",
-        "ICMP"
+        "Capa de Acceso a la Red",
+        "Capa de Internet",
+        "Capa de Transporte",
+        "Capa de Aplicación"
       ],
-      "correct": 2,
-      "exp": "TCP usa números de secuencia para garantizar la entrega ordenada y fiable."
+      "correct": 0,
+      "exp": "La capa de Enlace de datos y la capa Física se combinan en la Capa de Acceso a la Red de TCP/IP."
+    },
+    {
+      "q": "¿Cuál es el puerto TCP estándar utilizado por el protocolo SSH?",
+      "opts": [
+        "22",
+        "23",
+        "25",
+        "110"
+      ],
+      "correct": 0,
+      "exp": "SSH opera por defecto en el puerto TCP 22."
     }
   ]
 }
