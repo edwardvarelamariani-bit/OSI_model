@@ -1,171 +1,171 @@
 {
-  "generated_at": "2026-11-14T13:15:18.962Z",
+  "generated_at": "2026-11-15T13:43:18.051Z",
   "source": "groq/openai/gpt-oss-120b",
   "questions": [
     {
-      "q": "¿En qué capa del modelo OSI se encuentra el protocolo IP?",
+      "q": "¿En qué capa del modelo OSI se realiza el encaminamiento (routing) de paquetes?",
       "opts": [
-        "Capa de Enlace de datos",
-        "Capa de Red",
-        "Capa de Transporte",
-        "Capa de Aplicación"
+        "Física",
+        "Enlace de datos",
+        "Red",
+        "Transporte"
+      ],
+      "correct": 2,
+      "exp": "La capa Red (capa 3) es la responsable de determinar la ruta que seguirá un paquete a través de la red."
+    },
+    {
+      "q": "¿Cómo se denomina la unidad de datos (PDU) en la capa de Transporte?",
+      "opts": [
+        "Frame",
+        "Packet",
+        "Segment",
+        "Datagram"
+      ],
+      "correct": 2,
+      "exp": "En la capa de Transporte, la PDU se llama segmento (segment) para TCP y datagrama (datagram) para UDP; la opción más habitual es segmento."
+    },
+    {
+      "q": "¿Cuál de los siguientes protocolos opera principalmente en la capa de Sesión del modelo OSI?",
+      "opts": [
+        "TCP",
+        "NetBIOS",
+        "HTTP",
+        "LDAP"
       ],
       "correct": 1,
-      "exp": "El protocolo IP opera en la capa de Red (capa 3) del modelo OSI."
+      "exp": "NetBIOS provee servicios de sesión y es asociado a la capa de Sesión (capa 5)."
     },
     {
-      "q": "¿Cuál de los siguientes es el PDU (Unidad de Datos) de la capa de Transporte?",
-      "opts": [
-        "Segmento",
-        "Datagrama",
-        "Trama",
-        "Paquete"
-      ],
-      "correct": 0,
-      "exp": "En la capa de Transporte, los datos se encapsulan como segmentos (TCP) o datagramas (UDP), pero el término PDU estándar es segmento."
-    },
-    {
-      "q": "¿Qué puerto TCP está reservado para HTTPS?",
+      "q": "¿Qué puerto TCP se utiliza habitualmente para conexiones HTTPS?",
       "opts": [
         "80",
-        "21",
         "443",
-        "22"
+        "21",
+        "53"
       ],
-      "correct": 2,
-      "exp": "El puerto 443 es el puerto estándar para HTTPS sobre TCP."
+      "correct": 1,
+      "exp": "HTTPS opera sobre TLS en el puerto TCP 443."
     },
     {
-      "q": "¿Cuál de los siguientes dispositivos opera principalmente en la capa de Enlace de datos?",
+      "q": "En el modelo TCP/IP, ¿qué capas del modelo OSI se combinan en la capa Internet?",
+      "opts": [
+        "Application+Presentation",
+        "Network+Data Link",
+        "Network+Transport",
+        "Data Link+Physical"
+      ],
+      "correct": 1,
+      "exp": "La capa Internet agrupa las funciones de la capa de Red (capa 3) y la de Enlace de datos (capa 2) del modelo OSI."
+    },
+    {
+      "q": "¿Cuál de los siguientes dispositivos funciona fundamentalmente en la capa 2 del modelo OSI?",
       "opts": [
         "Router",
-        "Switch de capa 2",
-        "Firewall de aplicación",
-        "Servidor DNS"
+        "Switch",
+        "Firewall",
+        "Hub"
       ],
       "correct": 1,
-      "exp": "Un switch de capa 2 toma decisiones basadas en direcciones MAC, por lo que opera en la capa de Enlace de datos."
+      "exp": "Un switch opera en la capa de Enlace de datos, usando direcciones MAC para reenviar tramas."
     },
     {
-      "q": "En el modelo TCP/IP, la capa \"Internet\" corresponde a cuántas capas del modelo OSI?",
+      "q": "Durante la encapsulación, ¿qué encabezado se agrega primero al dato original?",
       "opts": [
-        "1",
-        "2",
-        "3",
-        "4"
+        "Application",
+        "Transport",
+        "Network",
+        "Data Link"
+      ],
+      "correct": 1,
+      "exp": "Primero se agrega el encabezado de la capa de Transporte (TCP/UDP) antes de los encabezados de capas inferiores."
+    },
+    {
+      "q": "¿Cuál de las siguientes afirmaciones NO corresponde al protocolo UDP?",
+      "opts": [
+        "Connectionless",
+        "Guarantees order",
+        "No flow control",
+        "Low overhead"
+      ],
+      "correct": 1,
+      "exp": "UDP no garantiza orden de entrega; es un protocolo sin conexión y sin control de flujo."
+    },
+    {
+      "q": "¿En qué capa del modelo OSI se definen las direcciones MAC?",
+      "opts": [
+        "Physical",
+        "Data Link",
+        "Network",
+        "Transport"
+      ],
+      "correct": 1,
+      "exp": "Las direcciones MAC son parte de la capa de Enlace de datos (capa 2)."
+    },
+    {
+      "q": "¿Cómo se llama la PDU en la capa de Red?",
+      "opts": [
+        "Frame",
+        "Packet",
+        "Segment",
+        "Message"
+      ],
+      "correct": 1,
+      "exp": "En la capa de Red la unidad de datos se denomina paquete (packet)."
+    },
+    {
+      "q": "El nivel de Presentación del modelo OSI no tiene un equivalente directo en el modelo TCP/IP. ¿Cuál es la respuesta correcta?",
+      "opts": [
+        "Application",
+        "Transport",
+        "No direct equivalent",
+        "Network"
       ],
       "correct": 2,
-      "exp": "La capa Internet del modelo TCP/IP engloba las capas de Red y parte de la capa de Enlace del modelo OSI (2 capas)."
+      "exp": "El modelo TCP/IP no incluye una capa separada para presentación; sus funciones están integradas en la capa de Aplicación."
     },
     {
-      "q": "¿Qué PDU se crea al salir de la capa de Red y entrar en la capa de Enlace de datos?",
+      "q": "¿Qué protocolo utiliza el puerto 53?",
       "opts": [
-        "Paquete",
-        "Trama",
-        "Segmento",
-        "Datagrama"
-      ],
-      "correct": 1,
-      "exp": "Al pasar de la capa de Red a la capa de Enlace, el paquete se encapsula dentro de una trama."
-    },
-    {
-      "q": "¿Cuál de los siguientes protocolos pertenece a la capa de Aplicación del modelo OSI?",
-      "opts": [
-        "ICMP",
-        "ARP",
+        "FTP",
+        "DNS",
         "SMTP",
-        "UDP"
-      ],
-      "correct": 2,
-      "exp": "SMTP es un protocolo de la capa de Aplicación, usado para envío de correo electrónico."
-    },
-    {
-      "q": "¿Qué puerto UDP se utiliza habitualmente para DNS?",
-      "opts": [
-        "53",
-        "123",
-        "161",
-        "69"
-      ],
-      "correct": 0,
-      "exp": "El puerto 53 es el puerto estándar para consultas DNS tanto TCP como UDP, pero se usa mayormente UDP."
-    },
-    {
-      "q": "En una comunicación TCP, ¿qué indica el flag SYN?",
-      "opts": [
-        "Fin de transmisión",
-        "Inicio de una conexión",
-        "Reenvío de datos perdidos",
-        "Confirmación de recepción"
+        "Telnet"
       ],
       "correct": 1,
-      "exp": "El flag SYN (synchronize) se usa para iniciar el proceso de establecimiento de una conexión TCP."
+      "exp": "El puerto 53 está asignado al protocolo DNS (Domain Name System)."
     },
     {
-      "q": "¿Cuál de los siguientes equipos puede realizar NAT?",
+      "q": "En IPv6, el campo \"Next Header\" reemplaza al campo equivalente de IPv4. ¿Cuál es?",
       "opts": [
-        "Hub",
-        "Switch de capa 3",
-        "Repeater",
-        "Bridge"
-      ],
-      "correct": 1,
-      "exp": "Un switch de capa 3 (o router) puede ejecutar NAT, mientras que los otros dispositivos no lo hacen."
-    },
-    {
-      "q": "En el modelo OSI, ¿qué capa es responsable de la codificación y compresión de datos?",
-      "opts": [
-        "Capa de Sesión",
-        "Capa de Presentación",
-        "Capa de Aplicación",
-        "Capa de Transporte"
-      ],
-      "correct": 1,
-      "exp": "La capa de Presentación se encarga de la traducción, codificación y compresión de datos."
-    },
-    {
-      "q": "¿Cuál es el número de puerto reservado para el protocolo SSH?",
-      "opts": [
-        "22",
-        "23",
-        "25",
-        "110"
+        "Protocol",
+        "Time To Live",
+        "Header Checksum",
+        "Source Address"
       ],
       "correct": 0,
-      "exp": "El puerto 22 está asignado al protocolo SSH para acceso remoto seguro."
+      "exp": "El campo \"Next Header\" en IPv6 indica el protocolo siguiente, sustituyendo al campo \"Protocol\" de IPv4."
     },
     {
-      "q": "En la encapsulación, ¿qué información se añade en la capa de Enlace de datos?",
+      "q": "¿Qué capa del modelo OSI se encarga de la detección de errores mediante CRC?",
       "opts": [
-        "Dirección IP de origen y destino",
-        "Dirección MAC de origen y destino",
-        "Número de secuencia TCP",
-        "Puerto UDP"
+        "Physical",
+        "Data Link",
+        "Network",
+        "Transport"
       ],
       "correct": 1,
-      "exp": "La capa de Enlace de datos agrega las direcciones MAC de origen y destino en la trama."
+      "exp": "La detección de errores con CRC se implementa en la capa de Enlace de datos."
     },
     {
-      "q": "¿Cuál de los siguientes protocolos opera en la capa de Red del modelo OSI y es usado para detección de errores en la entrega de paquetes?",
+      "q": "¿Cuál de los siguientes dispositivos puede operar tanto en la capa 2 como en la capa 3?",
       "opts": [
-        "ICMP",
-        "TCP",
-        "TLS",
-        "HTTP"
+        "Switch",
+        "Router",
+        "Bridge",
+        "Multilayer Switch"
       ],
-      "correct": 0,
-      "exp": "ICMP, que funciona en la capa de Red, se utiliza para mensajes de control y detección de errores como 'destino inalcanzable'."
-    },
-    {
-      "q": "¿Qué capa del modelo TCP/IP combina las funciones de las capas de Sesión y Presentación del modelo OSI?",
-      "opts": [
-        "Capa de Aplicación",
-        "Capa de Transporte",
-        "Capa de Enlace",
-        "Capa de Red"
-      ],
-      "correct": 0,
-      "exp": "La capa de Aplicación del modelo TCP/IP incorpora tanto la capa de Sesión como la capa de Presentación del modelo OSI."
+      "correct": 3,
+      "exp": "Un switch multilayer (o switch de capa 3) combina funciones de conmutación de capa 2 y enrutamiento de capa 3."
     }
   ]
 }
