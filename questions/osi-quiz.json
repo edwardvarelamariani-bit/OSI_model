@@ -1,42 +1,42 @@
 {
-  "generated_at": "2026-11-24T17:17:37.684Z",
+  "generated_at": "2026-11-25T16:58:46.323Z",
   "source": "groq/openai/gpt-oss-120b",
   "questions": [
     {
-      "q": "¿En qué capa del modelo OSI se realiza el enrutamiento?",
+      "q": "¿En qué capa del modelo OSI se realiza el enrutamiento de paquetes?",
       "opts": [
-        "Capa de enlace",
-        "Capa de red",
-        "Capa de transporte",
-        "Capa de sesión"
+        "Capa Física",
+        "Capa de Enlace de datos",
+        "Capa de Red",
+        "Capa de Transporte"
       ],
-      "correct": 1,
-      "exp": "El enrutamiento es función de la capa de red, que determina el camino de los paquetes."
+      "correct": 2,
+      "exp": "El enrutamiento se lleva a cabo en la capa de Red (capa 3)."
     },
     {
-      "q": "¿Cuál es el nombre del PDU en la capa de transporte del modelo OSI?",
+      "q": "¿Cuál es la unidad de datos (PDU) que corresponde a la capa de Transporte?",
       "opts": [
-        "Segmento",
-        "Paquete",
         "Trama",
-        "Datagrama"
+        "Paquete",
+        "Segmento",
+        "Bit"
       ],
-      "correct": 0,
-      "exp": "En la capa de transporte el PDU se llama segmento (TCP) o datagrama (UDP)."
+      "correct": 2,
+      "exp": "En la capa de Transporte, la PDU se llama segmento (para TCP) o datagrama (para UDP)."
     },
     {
-      "q": "¿Qué protocolo puede usar tanto TCP como UDP según la aplicación?",
+      "q": "¿Cuál de los siguientes protocolos opera principalmente en la capa de Sesión del modelo OSI?",
       "opts": [
-        "DHCP",
-        "SNMP",
-        "NTP",
-        "DNS"
+        "HTTP",
+        "FTP",
+        "NetBIOS",
+        "SSH"
       ],
-      "correct": 3,
-      "exp": "DNS usa UDP para consultas rápidas y TCP cuando la respuesta excede 512 bytes o para zona de transferencia."
+      "correct": 2,
+      "exp": "NetBIOS es un protocolo que funciona en la capa de Sesión, gestionando diálogos entre aplicaciones."
     },
     {
-      "q": "¿Cuál es el puerto estándar utilizado por HTTPS?",
+      "q": "¿Qué número de puerto está asignado al protocolo HTTPS?",
       "opts": [
         "80",
         "443",
@@ -44,10 +44,21 @@
         "25"
       ],
       "correct": 1,
-      "exp": "HTTPS opera sobre TLS en el puerto TCP 443."
+      "exp": "El puerto estándar de HTTPS es el 443."
     },
     {
-      "q": "¿Qué dispositivo aprende direcciones MAC y funciona en la capa 2?",
+      "q": "En el modelo TCP/IP, ¿qué capas del modelo OSI se combinan en la capa Internet?",
+      "opts": [
+        "Capa de Red y Capa de Enlace de datos",
+        "Capa de Red y Capa de Transporte",
+        "Capa de Aplicación, Presentación y Sesión",
+        "Capa de Enlace de datos y Física"
+      ],
+      "correct": 0,
+      "exp": "La capa Internet del modelo TCP/IP agrupa las capas de Red y Enlace de datos del modelo OSI."
+    },
+    {
+      "q": "¿Cuál de los siguientes dispositivos opera en la capa de Enlace de datos?",
       "opts": [
         "Router",
         "Switch",
@@ -55,87 +66,76 @@
         "Repeater"
       ],
       "correct": 1,
-      "exp": "Un switch opera en la capa de enlace y construye una tabla MAC aprendiendo direcciones."
+      "exp": "Un switch funciona principalmente en la capa 2 (Enlace de datos), conmutando tramas basándose en direcciones MAC."
     },
     {
-      "q": "Durante la encapsulación, ¿qué encabezado se agrega primero al crear la trama desde la aplicación hasta la capa física?",
-      "opts": [
-        "Encabezado de capa de red",
-        "Encabezado de capa de enlace",
-        "Encabezado de capa de transporte",
-        "Encabezado de capa física"
-      ],
-      "correct": 2,
-      "exp": "Primero se añade el encabezado de la capa de transporte (segmento), luego el de red, enlace y finalmente la señal física."
-    },
-    {
-      "q": "En el mapeo OSI‑TCP/IP, la capa de presentación del modelo OSI corresponde a:",
-      "opts": [
-        "Capa de aplicación",
-        "Capa de transporte",
-        "Capa de red",
-        "Capa de enlace"
-      ],
-      "correct": 0,
-      "exp": "Las funciones de presentación (formato, cifrado) se incluyen dentro de la capa de aplicación del modelo TCP/IP."
-    },
-    {
-      "q": "¿Qué protocolo resuelve direcciones IP a direcciones MAC en una LAN?",
-      "opts": [
-        "ARP",
-        "RARP",
-        "ICMP",
-        "DHCP"
-      ],
-      "correct": 0,
-      "exp": "ARP (Address Resolution Protocol) traduce una IP a su MAC correspondiente."
-    },
-    {
-      "q": "En TCP, ¿qué bandera indica el cierre de una conexión?",
-      "opts": [
-        "SYN",
-        "FIN",
-        "RST",
-        "ACK"
-      ],
-      "correct": 1,
-      "exp": "La bandera FIN señala que el emisor ha terminado de enviar datos y desea cerrar la conexión."
-    },
-    {
-      "q": "¿Cómo se llama el PDU de la capa de enlace del modelo OSI?",
-      "opts": [
-        "Frame",
-        "Segment",
-        "Datagram",
-        "Message"
-      ],
-      "correct": 0,
-      "exp": "En la capa de enlace el PDU se denomina trama (frame)."
-    },
-    {
-      "q": "¿Cuál de los siguientes protocolos pertenece a la capa de aplicación del modelo TCP/IP?",
+      "q": "¿Qué protocolo ofrece un servicio sin conexión (connectionless)?",
       "opts": [
         "TCP",
-        "IP",
-        "SMTP",
+        "UDP",
+        "SCTP",
         "ICMP"
       ],
-      "correct": 2,
-      "exp": "SMTP (Simple Mail Transfer Protocol) opera en la capa de aplicación para envío de correo electrónico."
+      "correct": 1,
+      "exp": "UDP es un protocolo de transporte sin conexión que no garantiza entrega ni orden."
     },
     {
-      "q": "¿Qué algoritmo utiliza OSPF en la capa de red para calcular rutas óptimas?",
+      "q": "Durante la encapsulación, ¿qué encabezado se agrega primero al pasar de la capa de aplicación a la capa física?",
       "opts": [
-        "Algoritmo de Dijkstra",
-        "Algoritmo Bellman-Ford",
-        "Algoritmo de Floyd-Warshall",
-        "Algoritmo de Spanning Tree"
+        "Encabezado de aplicación",
+        "Encabezado de transporte",
+        "Encabezado de red",
+        "Encabezado de enlace de datos"
+      ],
+      "correct": 1,
+      "exp": "El primer encabezado añadido es el de la capa de Transporte, después del de aplicación."
+    },
+    {
+      "q": "¿Cuál es la PDU que corresponde a la capa de Red?",
+      "opts": [
+        "Bit",
+        "Trama",
+        "Paquete",
+        "Segmento"
+      ],
+      "correct": 2,
+      "exp": "En la capa de Red, la unidad de datos se llama paquete."
+    },
+    {
+      "q": "¿Cuál de las siguientes NO es una función de la capa de Presentación?",
+      "opts": [
+        "Cifrado de datos",
+        "Compresión de datos",
+        "Enrutamiento",
+        "Traducción de sintaxis"
+      ],
+      "correct": 2,
+      "exp": "El enrutamiento pertenece a la capa de Red, no a la capa de Presentación."
+    },
+    {
+      "q": "En el modelo TCP/IP, la capa de Aplicación engloba qué capas del modelo OSI?",
+      "opts": [
+        "Aplicación, Presentación y Sesión",
+        "Transporte y Red",
+        "Enlace de datos y Física",
+        "Solo la capa de Aplicación"
       ],
       "correct": 0,
-      "exp": "OSPF usa el algoritmo de Dijkstra (Shortest Path First) para determinar la ruta de menor coste."
+      "exp": "La capa de Aplicación del modelo TCP/IP cubre las capas de Aplicación, Presentación y Sesión del modelo OSI."
     },
     {
-      "q": "¿Qué dispositivo puede dividir una red en subredes y funciona en la capa de red?",
+      "q": "¿Qué protocolo garantiza entrega fiable y ordenada de datos?",
+      "opts": [
+        "UDP",
+        "TCP",
+        "IP",
+        "ARP"
+      ],
+      "correct": 1,
+      "exp": "TCP proporciona control de flujo, retransmisiones y ordenamiento, asegurando entrega fiable."
+    },
+    {
+      "q": "¿Qué dispositivo opera en la capa 3 y puede realizar NAT?",
       "opts": [
         "Switch",
         "Router",
@@ -143,40 +143,40 @@
         "Bridge"
       ],
       "correct": 1,
-      "exp": "El router opera en la capa 3 y enruta paquetes entre diferentes subredes."
+      "exp": "Un router funciona en la capa de Red (capa 3) y puede ejecutar NAT para traducir direcciones IP."
     },
     {
-      "q": "¿Cuál es el número de puerto UDP asignado al servicio DNS?",
+      "q": "¿Qué número de puerto está reservado para el servicio DNS (tanto TCP como UDP)?",
       "opts": [
         "53",
-        "67",
-        "123",
+        "110",
+        "22",
         "161"
       ],
       "correct": 0,
-      "exp": "El puerto UDP 53 es el puerto estándar para consultas DNS."
+      "exp": "El puerto estándar asignado a DNS es el 53."
     },
     {
-      "q": "En el encabezado IP, ¿qué campo indica el protocolo del nivel superior?",
+      "q": "En la cadena de encapsulación, después de que la capa de Red añade su encabezado, ¿qué capa añade el siguiente encabezado?",
       "opts": [
-        "TTL",
-        "Checksum",
-        "Protocol",
-        "Version"
+        "Transporte",
+        "Enlace de datos",
+        "Física",
+        "Aplicación"
       ],
-      "correct": 2,
-      "exp": "El campo 'Protocol' del encabezado IP especifica si el PDU superior es TCP, UDP, ICMP, etc."
+      "correct": 1,
+      "exp": "Después de la capa de Red, la capa de Enlace de datos inserta su propio encabezado antes de pasar a la física."
     },
     {
-      "q": "¿Cuál es la diferencia principal entre TCP y UDP?",
+      "q": "¿Cuál es la unidad de datos (PDU) que utiliza la capa Física?",
       "opts": [
-        "TCP es orientado a conexión, UDP es sin conexión",
-        "TCP usa puertos, UDP no",
-        "TCP opera en capa de red, UDP en capa de aplicación",
-        "TCP garantiza entrega, UDP no tiene checksum"
+        "Bit",
+        "Octeto",
+        "Trama",
+        "Paquete"
       ],
       "correct": 0,
-      "exp": "TCP establece una conexión y garantiza entrega; UDP envía datagramas sin establecer conexión ni garantías."
+      "exp": "En la capa Física, la unidad básica es el bit, que se transmite como señales eléctricas, ópticas o de radio."
     }
   ]
 }
