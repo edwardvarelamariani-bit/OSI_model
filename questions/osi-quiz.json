@@ -1,182 +1,171 @@
 {
-  "generated_at": "2026-11-25T16:58:46.323Z",
+  "generated_at": "2026-11-26T16:39:12.491Z",
   "source": "groq/openai/gpt-oss-120b",
   "questions": [
     {
-      "q": "¿En qué capa del modelo OSI se realiza el enrutamiento de paquetes?",
+      "q": "¿En qué capa del modelo OSI se encuentra el protocolo IP?",
       "opts": [
-        "Capa Física",
         "Capa de Enlace de datos",
         "Capa de Red",
-        "Capa de Transporte"
+        "Capa de Transporte",
+        "Capa de Aplicación"
       ],
-      "correct": 2,
-      "exp": "El enrutamiento se lleva a cabo en la capa de Red (capa 3)."
+      "correct": 1,
+      "exp": "El protocolo IP opera en la capa 3, la Capa de Red del modelo OSI."
     },
     {
-      "q": "¿Cuál es la unidad de datos (PDU) que corresponde a la capa de Transporte?",
+      "q": "¿Cuál es la PDU (Unidad de Datos) que se utiliza en la capa de Transporte?",
       "opts": [
-        "Trama",
-        "Paquete",
         "Segmento",
+        "Paquete",
+        "Trama",
         "Bit"
       ],
-      "correct": 2,
-      "exp": "En la capa de Transporte, la PDU se llama segmento (para TCP) o datagrama (para UDP)."
+      "correct": 0,
+      "exp": "En la capa de Transporte la PDU se denomina segmento (TCP) o datagrama (UDP)."
     },
     {
-      "q": "¿Cuál de los siguientes protocolos opera principalmente en la capa de Sesión del modelo OSI?",
+      "q": "¿Cuál de los siguientes protocolos funciona en la capa de Sesión del modelo OSI?",
       "opts": [
         "HTTP",
+        "TLS",
         "FTP",
-        "NetBIOS",
         "SSH"
       ],
-      "correct": 2,
-      "exp": "NetBIOS es un protocolo que funciona en la capa de Sesión, gestionando diálogos entre aplicaciones."
-    },
-    {
-      "q": "¿Qué número de puerto está asignado al protocolo HTTPS?",
-      "opts": [
-        "80",
-        "443",
-        "21",
-        "25"
-      ],
       "correct": 1,
-      "exp": "El puerto estándar de HTTPS es el 443."
+      "exp": "TLS (Transport Layer Security) opera en la capa de Sesión, proporcionando establecimiento y gestión de sesiones seguras."
     },
     {
-      "q": "En el modelo TCP/IP, ¿qué capas del modelo OSI se combinan en la capa Internet?",
+      "q": "El puerto TCP 22 está asociado típicamente a:",
       "opts": [
-        "Capa de Red y Capa de Enlace de datos",
-        "Capa de Red y Capa de Transporte",
-        "Capa de Aplicación, Presentación y Sesión",
-        "Capa de Enlace de datos y Física"
+        "SMTP",
+        "DNS",
+        "SSH",
+        "POP3"
       ],
-      "correct": 0,
-      "exp": "La capa Internet del modelo TCP/IP agrupa las capas de Red y Enlace de datos del modelo OSI."
+      "correct": 2,
+      "exp": "El puerto 22 es el puerto estándar para SSH (Secure Shell)."
     },
     {
-      "q": "¿Cuál de los siguientes dispositivos opera en la capa de Enlace de datos?",
+      "q": "¿Qué dispositivo opera principalmente en la capa de Enlace de datos?",
       "opts": [
         "Router",
         "Switch",
-        "Hub",
-        "Repeater"
+        "Firewall",
+        "Proxy"
       ],
       "correct": 1,
-      "exp": "Un switch funciona principalmente en la capa 2 (Enlace de datos), conmutando tramas basándose en direcciones MAC."
+      "exp": "Un switch funciona en la capa 2, usando direcciones MAC para reenviar tramas."
     },
     {
-      "q": "¿Qué protocolo ofrece un servicio sin conexión (connectionless)?",
+      "q": "Durante la encapsulación, ¿qué información se añade primero al crear una trama Ethernet?",
+      "opts": [
+        "Dirección IP de origen",
+        "Dirección MAC de destino",
+        "Puerto de origen",
+        "Número de secuencia"
+      ],
+      "correct": 1,
+      "exp": "Primero se añaden las direcciones MAC de destino y origen al construir la trama de la capa de Enlace."
+    },
+    {
+      "q": "¿Cuál de los siguientes protocolos es sin conexión (connectionless)?",
       "opts": [
         "TCP",
-        "UDP",
+        "ICMP",
         "SCTP",
-        "ICMP"
+        "TLS"
       ],
       "correct": 1,
-      "exp": "UDP es un protocolo de transporte sin conexión que no garantiza entrega ni orden."
+      "exp": "ICMP es un protocolo sin conexión que se utiliza para mensajes de control y diagnóstico."
     },
     {
-      "q": "Durante la encapsulación, ¿qué encabezado se agrega primero al pasar de la capa de aplicación a la capa física?",
+      "q": "En el modelo TCP/IP, ¿a qué capa corresponde la capa de Aplicación del modelo OSI?",
       "opts": [
-        "Encabezado de aplicación",
-        "Encabezado de transporte",
-        "Encabezado de red",
-        "Encabezado de enlace de datos"
+        "Capa de Enlace",
+        "Capa de Internet",
+        "Capa de Transporte",
+        "Capa de Aplicación"
       ],
-      "correct": 1,
-      "exp": "El primer encabezado añadido es el de la capa de Transporte, después del de aplicación."
+      "correct": 3,
+      "exp": "La capa de Aplicación del modelo TCP/IP engloba las capas de Aplicación, Presentación y Sesión del modelo OSI."
     },
     {
-      "q": "¿Cuál es la PDU que corresponde a la capa de Red?",
-      "opts": [
-        "Bit",
-        "Trama",
-        "Paquete",
-        "Segmento"
-      ],
-      "correct": 2,
-      "exp": "En la capa de Red, la unidad de datos se llama paquete."
-    },
-    {
-      "q": "¿Cuál de las siguientes NO es una función de la capa de Presentación?",
-      "opts": [
-        "Cifrado de datos",
-        "Compresión de datos",
-        "Enrutamiento",
-        "Traducción de sintaxis"
-      ],
-      "correct": 2,
-      "exp": "El enrutamiento pertenece a la capa de Red, no a la capa de Presentación."
-    },
-    {
-      "q": "En el modelo TCP/IP, la capa de Aplicación engloba qué capas del modelo OSI?",
-      "opts": [
-        "Aplicación, Presentación y Sesión",
-        "Transporte y Red",
-        "Enlace de datos y Física",
-        "Solo la capa de Aplicación"
-      ],
-      "correct": 0,
-      "exp": "La capa de Aplicación del modelo TCP/IP cubre las capas de Aplicación, Presentación y Sesión del modelo OSI."
-    },
-    {
-      "q": "¿Qué protocolo garantiza entrega fiable y ordenada de datos?",
+      "q": "¿Qué protocolo garantiza la entrega fiable y ordenada de datos?",
       "opts": [
         "UDP",
-        "TCP",
         "IP",
+        "TCP",
         "ARP"
       ],
-      "correct": 1,
-      "exp": "TCP proporciona control de flujo, retransmisiones y ordenamiento, asegurando entrega fiable."
+      "correct": 2,
+      "exp": "TCP incluye mecanismos de control de errores, acuse de recibo y reordenamiento, asegurando entrega fiable."
     },
     {
-      "q": "¿Qué dispositivo opera en la capa 3 y puede realizar NAT?",
+      "q": "¿En qué capa del modelo OSI se realiza el enrutamiento de paquetes?",
       "opts": [
-        "Switch",
-        "Router",
-        "Hub",
-        "Bridge"
-      ],
-      "correct": 1,
-      "exp": "Un router funciona en la capa de Red (capa 3) y puede ejecutar NAT para traducir direcciones IP."
-    },
-    {
-      "q": "¿Qué número de puerto está reservado para el servicio DNS (tanto TCP como UDP)?",
-      "opts": [
-        "53",
-        "110",
-        "22",
-        "161"
+        "Capa de Red",
+        "Capa de Enlace",
+        "Capa de Transporte",
+        "Capa de Aplicación"
       ],
       "correct": 0,
-      "exp": "El puerto estándar asignado a DNS es el 53."
+      "exp": "El enrutamiento se lleva a cabo en la capa 3, la Capa de Red, donde opera el protocolo IP."
     },
     {
-      "q": "En la cadena de encapsulación, después de que la capa de Red añade su encabezado, ¿qué capa añade el siguiente encabezado?",
+      "q": "¿Cómo se denomina la PDU en la capa de Sesión?",
       "opts": [
-        "Transporte",
-        "Enlace de datos",
-        "Física",
-        "Aplicación"
-      ],
-      "correct": 1,
-      "exp": "Después de la capa de Red, la capa de Enlace de datos inserta su propio encabezado antes de pasar a la física."
-    },
-    {
-      "q": "¿Cuál es la unidad de datos (PDU) que utiliza la capa Física?",
-      "opts": [
-        "Bit",
-        "Octeto",
+        "Segmento",
+        "Datagrama",
         "Trama",
-        "Paquete"
+        "PDU de sesión"
+      ],
+      "correct": 3,
+      "exp": "En la capa de Sesión la PDU se llama simplemente PDU de sesión, ya que no tiene un nombre especializado como 'segmento' o 'trama'."
+    },
+    {
+      "q": "El servicio DNS utiliza típicamente el puerto:",
+      "opts": [
+        "80/TCP",
+        "443/TCP",
+        "53/UDP",
+        "25/TCP"
+      ],
+      "correct": 2,
+      "exp": "El puerto estándar para DNS es 53, y suele usar UDP, aunque también puede usar TCP para transferencias de zona."
+    },
+    {
+      "q": "¿Cuál capa del modelo OSI es responsable de la codificación y compresión de datos?",
+      "opts": [
+        "Capa de Presentación",
+        "Capa de Aplicación",
+        "Capa de Transporte",
+        "Capa de Sesión"
       ],
       "correct": 0,
-      "exp": "En la capa Física, la unidad básica es el bit, que se transmite como señales eléctricas, ópticas o de radio."
+      "exp": "La Capa de Presentación gestiona la sintaxis, codificación, compresión y cifrado de la información."
+    },
+    {
+      "q": "¿Cuál de los siguientes protocolos pertenece a la capa de Aplicación en el modelo TCP/IP?",
+      "opts": [
+        "TCP",
+        "IP",
+        "HTTP",
+        "ICMP"
+      ],
+      "correct": 2,
+      "exp": "HTTP es un protocolo de la capa de Aplicación, utilizado para la transferencia de hipertexto."
+    },
+    {
+      "q": "En cuanto al control de flujo, ¿qué diferencia principal tiene TCP respecto a UDP?",
+      "opts": [
+        "TCP no implementa control de flujo, UDP sí",
+        "TCP usa ventana deslizante para regular el envío, UDP no tiene control de flujo",
+        "UDP garantiza entrega ordenada, TCP no",
+        "Ambos usan el mismo mecanismo de control de flujo"
+      ],
+      "correct": 1,
+      "exp": "TCP emplea una ventana deslizante que permite controlar cuántos bytes pueden enviarse antes de recibir acuse, mientras que UDP carece de control de flujo."
     }
   ]
 }
